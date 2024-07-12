@@ -1,0 +1,10 @@
+# Node modules directory
+node_modules/
+
+# Custom directories to ignore
+property/
+south-master/
+royalestate-master/
+public 2/
+monday-master/
+homeland-master/
