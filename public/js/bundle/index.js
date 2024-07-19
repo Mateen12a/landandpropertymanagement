@@ -7477,7 +7477,7 @@ const addProperty = async (data, type)=>{
             data.append("amenities", JSON.stringify(amenities));
         } else data.append("amenities", JSON.stringify([]));
         const id = window.location.pathname.split("/").find((el)=>el.length > 11 && (el !== "property" || el !== "update"));
-        const url = type === "new" ? "http://127.0.0.1:5000/api/v1/property/new" : `http://127.0.0.1:5000/api/v1/property/${id}`;
+        const url = type === "new" ? "https://landandpropertymanagement.com/api/v1/property/new" : `https://landandpropertymanagement.com/api/v1/property/${id}`;
         const res = await (0, _axiosDefault.default)({
             method: type === "new" ? "POST" : "PATCH",
             url,
@@ -7496,7 +7496,7 @@ const addProperty = async (data, type)=>{
 const deleteProperty = async ()=>{
     try {
         const id = window.location.pathname.split("/").find((el)=>el.length > 11 && (el !== "property" || el !== "update"));
-        const url = `http://127.0.0.1:5000/api/v1/property/${id}`;
+        const url = `https://landandpropertymanagement.com/api/v1/property/${id}`;
         const res = await (0, _axiosDefault.default)({
             url,
             method: "DELETE"
@@ -7513,7 +7513,7 @@ const deleteProperty = async ()=>{
 };
 const updateSettings = async (data, type)=>{
     try {
-        const url = type === "password" ? "http://127.0.0.1:5000/api/v1/users/updateMyPassword/" : "http://127.0.0.1:5000/api/v1/users/updateMe";
+        const url = type === "password" ? "https://landandpropertymanagement.com/api/v1/users/updateMyPassword/" : "https://landandpropertymanagement.com/api/v1/users/updateMe";
         const res = await (0, _axiosDefault.default)({
             method: "PATCH",
             url,
@@ -7531,7 +7531,7 @@ const updateSettings = async (data, type)=>{
 };
 const addBookmark = async (data, type, el = null)=>{
     try {
-        const url = type === "add" ? "http://127.0.0.1:5000/api/v1/users/bookMark/add" : "http://127.0.0.1:5000/api/v1/users/bookmark/remove";
+        const url = type === "add" ? "https://landandpropertymanagement.com/api/v1/users/bookMark/add" : "https://landandpropertymanagement.com/api/v1/users/bookmark/remove";
         const res = await (0, _axiosDefault.default)({
             method: "PATCH",
             url,
