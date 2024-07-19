@@ -74,8 +74,8 @@ data.append("agent", agentId);
     const id = window.location.pathname.split("/").find((el) => el.length > 11 && (el !== "property" && el !== "update"));
 
     const url = type === "new"
-      ? "http://127.0.0.1:5000/api/v1/property/new"
-      : `http://127.0.0.1:5000/api/v1/property/${id}`;
+      ? "https://landandpropertymanagement.com/api/v1/property/new"
+      : `https://landandpropertymanagement.com/api/v1/property/${id}`;
 
     const token = sessionStorage.getItem('jwt'); // Retrieve the token from localStorage
     if (!token) {
@@ -108,7 +108,7 @@ data.append("agent", agentId);
 export const deleteProperty = async () => {
   try {
     const id = window.location.pathname.split("/").find((el) => el.length > 11 && (el !== "property" && el !== "update"));
-    const url = `http://127.0.0.1:5000/api/v1/property/${id}`;
+    const url = `https://landandpropertymanagement.com/api/v1/property/${id}`;
     const token = sessionStorage.getItem('jwt'); // Retrieve the token from localStorage
 
     if (!token) {
@@ -141,8 +141,8 @@ export const updateSettings = async (data, type) => {
   try {
     const url =
       type === "password"
-        ? "http://127.0.0.1:5000/api/v1/users/updateMyPassword/"
-        : "http://127.0.0.1:5000/api/v1/users/updateMe";
+        ? "https://landandpropertymanagement.com/api/v1/users/updateMyPassword/"
+        : "https://landandpropertymanagement.com/api/v1/users/updateMe";
 
     const token = sessionStorage.getItem('jwt'); // Retrieve the token from localStorage
 
@@ -177,8 +177,8 @@ export const addBookmark = async (data, type, el = null) => {
   try {
     const url =
       type === "add"
-        ? "http://127.0.0.1:5000/api/v1/users/bookMark/add"
-        : "http://127.0.0.1:5000/api/v1/users/bookmark/remove";
+        ? "https://landandpropertymanagement.com/api/v1/users/bookMark/add"
+        : "https://landandpropertymanagement.com/api/v1/users/bookmark/remove";
 
     const token = sessionStorage.getItem('jwt'); // Retrieve the token from localStorage
 
