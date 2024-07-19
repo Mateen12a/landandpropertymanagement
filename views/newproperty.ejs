@@ -1,0 +1,220 @@
+<div
+  class="hero page-inner overlay"
+  style="background-image: url('/images/hero_bg_3.jpg')"
+>
+  <div class="container">
+    <div class="row justify-content-center align-items-center">
+      <div class="col-lg-9 text-center mt-5">
+        <h1 class="heading" data-aos="fade-up">Post a New Property</h1>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="section">
+  <div class="container new-property">
+    <form id="propertyForm" class="form__property" data-id="<%= user ? user._id : '' %>">
+      <!-- Section 1: Address -->
+      <div id="section1">
+        <h2 class="mb-4">Address</h2>
+        <div class="form-group">
+          <label for="location-state">State</label>
+          <div class="input-group">
+            <div class="input-group-prepend">
+              <span class="input-group-text"><i class="fa fa-map-marker"></i></span>
+            </div>
+            <input class="location-state form-control" type="text" placeholder="State" id="location-state" name="location[state]" required>
+          </div>
+        </div>
+    
+        <div class="form-group">
+          <label for="location-city">City</label>
+          <div class="input-group">
+            <div class="input-group-prepend">
+              <span class="input-group-text"><i class="fa fa-building"></i></span>
+            </div>
+            <input class="location-city form-control" type="text" placeholder="City" id="location-city" name="location[city]" required>
+          </div>
+        </div>
+    
+        <div class="form-group">
+          <label for="location-street">Street</label>
+          <div class="input-group">
+            <div class="input-group-prepend">
+              <span class="input-group-text"><i class="fa fa-road"></i></span>
+            </div>
+            <input class="location-street form-control" type="text" placeholder="Street" id="location-street" name="location[street]">
+          </div>
+        </div>
+    
+        <div class="form-group">
+          <label for="location-lng">Longitude</label>
+          <div class="input-group">
+            <div class="input-group-prepend">
+              <span class="input-group-text"><i class="fa fa-globe"></i></span>
+            </div>
+            <input class="form-control" type="number" placeholder="Longitude" id="location-lng" name="location[lng]">
+          </div>
+        </div>
+    
+        <div class="form-group">
+          <label for="location-lat">Latitude</label>
+          <div class="input-group">
+            <div class="input-group-prepend">
+              <span class="input-group-text"><i class="fa fa-globe"></i></span>
+            </div>
+            <input class="form-control" type="number" placeholder="Latitude" id="location-lat" name="location[lat]">
+          </div>
+        </div>
+    
+        <button type="button" class="btn btn-primary" onclick="showSection(2)">Next</button>
+      </div>
+    
+      <!-- Section 2: Basic Info -->
+      <div id="section2" style="display:none;">
+        <h2 class="mb-4">Basic Info</h2>
+        <div class="form-group">
+          <label for="name">Name</label>
+          <div class="input-group">
+            <div class="input-group-prepend">
+              <span class="input-group-text"><i class="fa fa-home"></i></span>
+            </div>
+            <input class="name form-control" type="text" placeholder="Name" id="name" name="name" required>
+          </div>
+        </div>
+    
+        <div class="form-group">
+          <label for="price">Price</label>
+          <div class="input-group">
+            <div class="input-group-prepend">
+              <span class="input-group-text"><i class="fa fa-dollar"></i></span>
+            </div>
+            <input class="price form-control" type="number" placeholder="Price" id="price" name="price" required>
+          </div>
+        </div>
+    
+        <div class="form-group">
+          <label for="priceDiscount">Price Discount</label>
+          <div class="input-group">
+            <div class="input-group-prepend">
+              <span class="input-group-text"><i class="fa fa-percent"></i></span>
+            </div>
+            <input class="priceDiscount form-control" type="number" placeholder="Price Discount" id="priceDiscount" name="priceDiscount">
+          </div>
+        </div>
+    
+        <div class="form-group">
+          <label for="description">Description</label>
+          <div class="input-group">
+            <div class="input-group-prepend">
+              <span class="input-group-text"><i class="fa fa-info-circle"></i></span>
+            </div>
+            <textarea class="description form-control" placeholder="Description" name="description" id="description" required></textarea>
+          </div>
+        </div>
+    
+        <div class="form-group">
+          <label for="area">Area (in sqmetre)</label>
+          <div class="input-group">
+            <div class="input-group-prepend">
+              <span class="input-group-text"><i class="fa fa-arrows-alt"></i></span>
+            </div>
+            <input class="area form-control" type="number" placeholder="Area (in sqmetre)" name="area" id="area">
+          </div>
+        </div>
+    
+        <div class="form-group">
+          <label for="type">Type</label>
+          <div class="input-group">
+            <div class="input-group-prepend">
+              <span class="input-group-text"><i class="fa fa-list"></i></span>
+            </div>
+            <select class="type form-control" name="type" required>
+              <option value="sell">Sell</option>
+              <option value="shortlet">Shortlet</option>
+              <option value="rent">Rent</option>
+              <option value="land">Land</option>
+            </select>
+          </div>
+        </div>
+    
+        <button type="button" class="btn btn-secondary" onclick="showSection(1)">Back</button>
+        <button type="button" class="btn btn-primary" onclick="showSection(3)">Next</button>
+      </div>
+    
+      <!-- Section 3: Photos -->
+      <div id="section3" style="display:none;">
+        <h2 class="mb-4">Photos</h2>
+        <div class="property__images-box property__images-box--imageCover"></div>
+        <div class="form-group">
+          <label for="imageCover">Image Cover</label>
+          <div class="input-group">
+            <div class="input-group-prepend">
+              <span class="input-group-text"><i class="fa fa-camera"></i></span>
+            </div>
+            <input class="form-control imageCover-input" type="file" name="imageCover" id="imageCover" accept="image/*">
+          </div>
+        </div>
+    
+        <div class="property__images-box property__images-box-images"></div>
+        <div class="form-group">
+          <label for="images">Images</label>
+          <div class="input-group">
+            <div class="input-group-prepend">
+              <span class="input-group-text"><i class="fa fa-images"></i></span>
+            </div>
+            <input class="form-control images-input" type="file" name="images" id="images" accept="image/*" multiple>
+          </div>
+        </div>
+    
+        <div class="form-group">
+          <label for="amenities-bed">Beds</label>
+          <div class="input-group">
+            <div class="input-group-prepend">
+              <span class="input-group-text"><i class="fa fa-bed"></i></span>
+            </div>
+            <input class="quantity-bed form-control" type="number" placeholder="Beds" name="amenities[bed]" id="amenities-bed" value="1">
+          </div>
+        </div>
+    
+        <div class="form-group">
+          <label for="amenities-bath">Baths</label>
+          <div class="input-group">
+            <div class="input-group-prepend">
+              <span class="input-group-text"><i class="fa fa-bath"></i></span>
+            </div>
+            <input class="quantity-bath form-control" type="number" placeholder="Baths" name="amenities[bath]" id="amenities-bath" value="1">
+          </div>
+        </div>
+    
+        <div class="form-group">
+          <label for="amenities-toilet">Toilets</label>
+          <div class="input-group">
+            <div class="input-group-prepend">
+              <span class="input-group-text"><i class="fa fa-toilet"></i></span>
+            </div>
+            <input class="quantity-toilet form-control" type="number" placeholder="Toilets" name="amenities[toilet]" id="amenities-toilet" value="1">
+          </div>
+        </div>
+    
+        <div class="form-group">
+          <label for="tags">Tags</label>
+          <div class="input-group tags__field-box">
+            <div class="input-group-prepend">
+              <span class="input-group-text"><i class="fa fa-tags"></i></span>
+            </div>
+            <ul class="tags__field">
+              <li class="tags__field-item">
+                <input class="tags__field-input tags form-control" type="text" placeholder="Tags e.g. furnished, new,..." name="tags" id="tags" required>
+              </li>
+            </ul>
+          </div>
+        </div>
+    
+        <button type="button" class="btn btn-secondary" onclick="showSection(2)">Back</button>
+        <button type="submit" class="btn btn-primary">Submit</button>
+      </div>
+    </form>
+    
+  </div>
+</div>
+

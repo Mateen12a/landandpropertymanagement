@@ -1,24 +1,28 @@
 const express = require('express');
+const mainController = require('../controllers/mainController')
+const authController = require('../controllers/authController')
 const router = express.Router(); // Create a router instance
 
-router.get('/', (req, res) => {
-    res.render('home', { activePage: 'home' });
-});
-
-router.get('/about', (req, res) => {
-    res.render('about', { activePage: 'about' });
-});
-
-router.get('/services', (req, res) => {
-    res.render('services', { activePage: 'services' });
-});
-
-router.get('/properties', (req, res) => {
-    res.render('properties', { activePage: 'properties' });
-});
-
-router.get('*', (req, res) => { // Catch-all route for 404 errors
-    res.render('home', { activePage: 'home' }); // Render a 404 page (create one!)
-});
+router
+    .get('/', authController.isLoggedIn, mainController.getOverview)
+    .get('/about',  authController.isLoggedIn,(req, res) => {
+    res.render('about', { 
+        title: "About us", activePage: 'about' });
+    })
+    .get('/services',  authController.isLoggedIn,(req, res) => {
+    res.render('services', { 
+        title: "Services", activePage: 'services' });
+    })
+    .get('/properties',  authController.isLoggedIn,mainController.getAllProperties)
+    .get("/property/new",
+        authController.protect,
+        authController.restrictTo(),
+        mainController.newProperty
+      )
+    .get("/properties/search", authController.isLoggedIn, mainController.searchProperties)
+    .get("/property/:id", authController.isLoggedIn, mainController.getProperty)
+    .get('/register',  authController.isLoggedIn, mainController.getSignup)
+    .get('/login',  mainController.getLogin)
+    .get('/*', mainController.getErrorPage);
 
 module.exports = router;

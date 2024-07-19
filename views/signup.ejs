@@ -1,0 +1,117 @@
+<div
+class="hero page-inner overlay"
+style="background-image: url('images/hero_bg_3.jpg')"
+>
+<div class="container">
+  <div class="row justify-content-center align-items-center">
+    <div class="col-lg-9 text-center mt-5">
+      <h1 class="heading" data-aos="fade-up">Join Us</h1>
+
+      <nav
+        aria-label="breadcrumb"
+        data-aos="fade-up"
+        data-aos-delay="200"
+      >
+        <ol class="breadcrumb text-center justify-content-center">
+          <li
+            class="breadcrumb-item active text-white-50"
+            aria-current="page"
+          >
+            Register
+          </li>
+        </ol>
+      </nav>
+    </div>
+  </div>
+</div>
+</div>
+
+<div class="card bg-light">
+    <article class="card-body mx-auto" style="max-width: 400px;">
+        <h4 class="card-title mt-3 text-center"><i class="fa-solid fa-user-plus"></i>  Create Account</h4>
+        <p class="text-center">Get started with your free account</p>
+        <!-- <p class="text-center">
+            <a href="" class="btn btn-block btn-google"> <i class="fab fa-google"></i>   Sign Up via Google</a>
+            <a href="" class="btn btn-block btn-facebook"> <i class="fab fa-facebook-f"></i>   Sign Up via facebook</a>
+        </p>
+        <p class="divider-text">
+            <span class="bg-light">OR</span>
+        </p> -->
+        <form class="form--signup">
+            <div class="form-group">
+                <label for="account_name">Full name</label>
+                <div class="input-group">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text"> <i class="fa fa-user"></i> </span>
+                    </div>
+                    <input id="account_name" name="name" class="form-control" placeholder="Full name" type="text">
+                </div>
+            </div> <!-- form-group// -->
+        
+            <div class="form-group">
+                <label for="account_email">Email address</label>
+                <div class="input-group">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text"> <i class="fa fa-envelope"></i> </span>
+                    </div>
+                    <input id="account_email" name="email" class="form-control" placeholder="Email address" type="email">
+                </div>
+            </div> <!-- form-group// -->
+        
+            <div class="form-group">
+                <label for="account_phone">Phone number</label>
+                <div class="input-group">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text"> <i class="fa fa-phone"></i> </span>
+                    </div>
+                    <select class="custom-select" style="max-width: 120px;">
+                        <option selected="">+234</option>
+                    </select>
+                    <input id="account_phone" name="phone" class="form-control" placeholder="Phone number" type="text">
+                </div>
+            </div> <!-- form-group// -->
+        
+            <div class="form-group">
+                <label for="role">Select account type</label>
+                <div class="input-group">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text"> <i class="fa fa-building"></i> </span>
+                    </div>
+                    <select id="role" name="role" class="form-control">
+                        <option value="" <%= role === '' ? 'selected' : '' %>>Select account type</option>
+                        <option value="user" <%= role === 'user' ? 'selected' : '' %>>User</option>
+                        <option value="agent" <%= role === 'agent' ? 'selected' : '' %>>Agent</option>
+                    </select>
+                    
+                </div>
+            </div> <!-- form-group// -->
+        
+            <div class="form-group">
+                <label for="account_password">Create password</label>
+                <div class="input-group">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text"> <i class="fa fa-lock"></i> </span>
+                    </div>
+                    <input id="account_password" name="password" class="form-control" placeholder="Create password" type="password" minlength="8">
+                </div>
+            </div> <!-- form-group// -->
+        
+            <div class="form-group">
+                <label for="account_passwordConfirm">Confirm password</label>
+                <div class="input-group">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text"> <i class="fa fa-lock"></i> </span>
+                    </div>
+                    <input id="account_passwordConfirm" name="passwordConfirm" class="form-control" placeholder="Confirm password" type="password">
+                </div>
+            </div> <!-- form-group// -->
+        
+            <div class="form-group text-center">
+                <button type="submit" class="w-100 btn btn-primary btn-block btn--login">Create Account</button>
+            </div> <!-- form-group// -->
+        
+            <p class="text-center">Have an account? <a href="/login">Log In</a></p>
+        </form>
+        
+    </article>
+    </div> 

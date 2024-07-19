@@ -1,0 +1,51 @@
+doctype html
+html(lang="en")
+  head
+        block head
+            meta(charset="utf-8")
+            meta(name="viewport" content="width=device-width, initial-scale=1")
+            meta(name="author" content="Mateen James")
+            link(rel="shortcut icon" href="favicon.png")
+            meta(name="description" content="")
+            meta(name="keywords" content="bootstrap, bootstrap5")
+            link(rel="preconnect" href="https://fonts.googleapis.com")
+            link(rel="preconnect" href="https://fonts.gstatic.com" crossorigin)
+            link(
+            href="https://fonts.googleapis.com/css2?family=Work+Sans:wght@400;500;600;700&display=swap"
+            rel="stylesheet"
+            )
+            link(rel="stylesheet" href="https://site-assets.fontawesome.com/releases/v6.5.2/css/all.css")
+            link(rel="stylesheet" href="fonts/icomoon/style.css")
+            link(rel="stylesheet" href="fonts/flaticon/font/flaticon.css")
+            link(rel="stylesheet" href="css/tiny-slider.css")
+            link(rel="stylesheet" href="css/aos.css")
+            link(rel="stylesheet" href="css/style2.css")
+            title #{title}
+
+    body
+        .site-mobile-menu.site-navbar-target
+            .site-mobile-menu-header
+                .site-mobile-menu-close
+                    span.icofont-close.js-menu-toggle
+            .site-mobile-menu-body
+        include _header
+
+        //Content
+        block content
+            h1 This is a placeholder heading
+
+        //Footer
+        include _footer
+
+       // Preloader
+    #overlayer
+    .loader
+      .spinner-border(role="status")
+        span.visually-hidden Loading...
+    
+    script(src="js/bootstrap.bundle.min.js")
+    script(src="js/tiny-slider.js")
+    script(src="js/aos.js")
+    script(src="js/navbar.js")
+    script(src="js/counter.js")
+    script(src="js/custom.js")

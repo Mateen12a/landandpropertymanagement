@@ -1,0 +1,106 @@
+<div class="hero page-inner overlay" style="background-image: url('images/hero_bg_1.jpg')">
+  <div class="container">
+    <div class="row justify-content-center align-items-center">
+      <div class="col-lg-9 text-center mt-5">
+        <h1 class="heading" data-aos="fade-up">Properties Found for Your Search "<%= query %>"</h1>
+        <nav aria-label="breadcrumb" data-aos="fade-up" data-aos-delay="200">
+          <ol class="breadcrumb text-center justify-content-center">
+            <li class="breadcrumb-item"><a href="/">Home</a></li>
+            <li class="breadcrumb-item active text-white-50" aria-current="page">Properties</li>
+          </ol>
+        </nav>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="section">
+  <div class="container">
+    <div class="row mb-5 align-items-center">
+      <div class="col-lg-6 text-center mx-auto">
+        <h2 class="font-weight-bold text-primary heading">Featured Properties</h2>
+      </div>
+    </div>
+    <!-- Property Slider -->
+    <%- include('partials/propertyslide', { properties: properties }) %>
+  </div>
+</div>
+
+<div class="section section-properties">
+  <div class="container">
+    <form id="searchForm" class="find_property narrow-w form-search d-flex align-items-stretch mb-3" data-aos="fade-up" data-aos-delay="200">
+      <input type="text" name="query" class="form-control px-4" placeholder="Search Locations For Land and Properties. e.g. Lekki" value="<%= query %>"/>
+      <button type="submit" class="btn btn-primary">Search</button>
+    </form>
+
+    <% if (message) { %>
+      <div class="alert alert-warning"><%= message %></div>
+    <% } %>
+
+    <div class="row">
+      <% mainproperties.forEach(property => { %>
+      <div class="col-xs-12 col-sm-6 col-md-6 col-lg-4">
+        <div class="property-item mb-30">
+          <a href="/property/<%= property._id %>" class="img">
+            <img src="/img/properties/<%= property.imageCover %>" alt="<%= property.name %>" class="img-fluid" />
+          </a>
+          <div class="property-content">
+            <div class="price mb-2"><span>₦<%= property.price %></span></div>
+            <div>
+              <span class="d-block mb-2 text-black-50"><%= property.location.street %></span>
+              <span class="city d-block mb-3"><%= property.location.city %>, <%= property.location.state %></span>
+              <div class="specs d-flex mb-4">
+                <% if (property.amenities && property.amenities.length > 0) { %>
+                  <% property.amenities.forEach(function(amenity) { %>
+                    <% if (amenity.amenity === 'bed' || amenity.amenity === 'beds') { %>
+                      <span class="d-block d-flex align-items-center me-3">
+                        <span class="icon-bed me-2"></span>
+                        <span class="caption"><%= amenity.quantity %> <%= amenity.amenity %></span>
+                      </span>
+                    <% } %>
+                    <% if (amenity.amenity === 'bath' || amenity.amenity === 'baths') { %>
+                      <span class="d-block d-flex align-items-center">
+                        <span class="icon-bath me-2"></span>
+                        <span class="caption"><%= amenity.quantity %> <%= amenity.amenity %></span>
+                      </span>
+                    <% } %>
+                  <% }) %>
+                <% } %>
+              </div>
+              <a href="/property/<%= property._id %>" class="btn btn-primary py-2 px-3">See details</a>
+            </div>
+          </div>
+        </div>
+      </div>
+      <% }); %>
+    </div>
+
+    <!-- Pagination -->
+    <% if (totalPages > 1) { %>
+    <div class="row align-items-center py-5">
+      <div class="col-lg-3">Pagination (<%= currentPage %> of <%= totalPages %>)</div>
+      <div class="col-lg-6 text-center">
+        <div class="custom-pagination">
+          <% for (let i = 1; i <= totalPages; i++) { %>
+          <a href="<%= query ? `/properties/search?query=${query}&page=${i}` : `/properties?page=${i}` %>" class="<%= i == currentPage ? 'active' : '' %>"><%= i %></a>
+          <% } %>
+        </div>
+      </div>
+    </div>
+    <% } %>
+  </div>
+</div>
+
+<script>
+const hideAlert = () => {
+  const el = document.querySelector(".alert");
+  if (el) el.parentElement.removeChild(el);
+}
+window.setTimeout(hideAlert, 2500);
+
+document.getElementById('searchForm').addEventListener('submit', function(e) {
+  e.preventDefault();
+  const query = document.querySelector('input[name="query"]').value;
+  window.location.href = `/properties/search?query=${encodeURIComponent(query)}`;
+});
+</script>

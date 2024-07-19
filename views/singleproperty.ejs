@@ -1,0 +1,110 @@
+<% if (property) { %>
+    <div
+        class="hero page-inner overlay"
+        style="background-image: url('/img/properties/<%= property.imageCover %>')"
+    >
+        <div class="container">
+            <div class="row justify-content-center align-items-center">
+                <div class="col-lg-9 text-center mt-5">
+                    <h1 class="heading" data-aos="fade-up">
+                        <%= property.name %>
+                    </h1>
+
+                    <nav aria-label="breadcrumb" data-aos="fade-up" data-aos-delay="200">
+                        <ol class="breadcrumb text-center justify-content-center">
+                            <li class="breadcrumb-item"><a href="/">Home</a></li>
+                            <li class="breadcrumb-item"><a href="/properties">Properties</a></li>
+                            <li class="breadcrumb-item active text-white-50" aria-current="page">
+                                <%= property.name %>
+                            </li>
+                        </ol>
+                    </nav>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="section">
+        <div class="container">
+            <div class="row justify-content-between">
+                <div class="col-lg-7">
+                    <div class="img-property-slide-wrap">
+                        <div class="img-property-slide">
+                            <% property.images.forEach(image => { %>
+                                <img src="/img/properties/<%= image %>" alt="Image" class="img-fluid" />
+                            <% }) %>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4">
+                    <h2 class="heading text-primary"><%= property.name %></h2>
+                    <p class="meta"><%= property.location.city %>, <%= property.location.state %>, <%= property.location.country %></p>
+                    <p class="text-black-50"><%= property.description %></p>
+                    <h5 class="heading">Amenities</h5>
+                    <% if (property.amenities && property.amenities.length > 0) { %> 
+                        <% property.amenities.forEach(function(amenity) { %>
+                            <% if (amenity.amenity === 'bed' || amenity.amenity === 'beds') { %>
+                                <span class="d-block d-flex align-items-center me-3">
+                                    <span class="icon-bed me-2"></span>
+                                    <span class="caption"><%= amenity.quantity %> <%= amenity.amenity %></span>
+                                </span>
+                            <% } %>
+                            <% if (amenity.amenity === 'bath' || amenity.amenity === 'baths') { %>
+                                <span class="d-block d-flex align-items-center">
+                                    <span class="icon-bath me-2"></span>
+                                    <span class="caption"><%= amenity.quantity %> <%= amenity.amenity %></span>
+                                </span>
+                            <% } %>
+                            <% if (amenity.amenity === 'toilet' || amenity.amenity === 'toilets') { %>
+                                <span class="d-block d-flex align-items-center">
+                                    <span class="fas fa-toilet me-2"></span>
+                                    <span class="caption"><%= amenity.quantity %> <%= amenity.amenity %></span>
+                                </span>
+                            <% } %>
+                        <% }) %>
+                        <% } %>
+
+                    <% if (property.agent) { %>
+                        <div class="d-block agent-box p-5">
+                            <h4>Agent details</h4>
+                            <div class="img mb-4">
+                                <img src="img/users/<%= property.agent.photo %>" alt="Image" class="img-fluid" />
+                            </div>
+                            <div class="text">
+                                <h3 class="mb-0"><%= property.agent.name %></h3>
+                                <div class="meta mb-3">Real Estate Agent</div>
+                                <p><%= property.agent.description %></p>
+                                <ul class="list-unstyled social dark-hover d-flex">
+                                    <li class="me-1"><a href="<%= property.agent.instagram %>"><span class="icon-instagram"></span></a></li>
+                                    <li class="me-1"><a href="<%= property.agent.twitter %>"><span class="icon-twitter"></span></a></li>
+                                    <li class="me-1"><a href="<%= property.agent.facebook %>"><span class="icon-facebook"></span></a></li>
+                                    <li class="me-1"><a href="<%= property.agent.linkedin %>"><span class="icon-linkedin"></span></a></li>
+                                </ul>
+                            </div>
+                        </div>
+                    <% } else { %>
+                        <div class="d-block agent-box p-5">
+                            <h4>Agent details</h4>
+                            <div class="img mb-4">
+                                <img src="/img/users/default.jpg" alt="Image" class="img-fluid" />
+                            </div>
+                            <div class="text">
+                                <h3 class="mb-0">No Information Available</h3>
+                                <div class="meta mb-3">Real Estate Agent</div>
+                            </div>
+                        </div>
+                    <% } %>
+                </div>
+            </div>
+        </div>
+    </div>
+    <% } else { %>
+    <div class="container">
+        <div class="row justify-content-center align-items-center">
+            <div class="col-lg-9 text-center mt-5">
+                <h1 class="heading" data-aos="fade-up">Property Not Found</h1>
+                <p class="text-black-50">The property you are looking for does not exist.</p>
+            </div>
+        </div>
+    </div>
+    <% } %>
