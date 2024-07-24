@@ -4,7 +4,7 @@
     <div class="property-slider-wrap">
       <div class="property-slider">
         <% properties.forEach(property => { %>
-        <div class="property-item">
+        <div class="feature__card property-item">
           <a href="/property/<%= property._id %>" class="img">
             <img src="/img/properties/<%= property.imageCover %>" alt="<%= property.name %>" class="img-fluid" />
           </a>
@@ -31,7 +31,10 @@
                   <% }) %>
                 <% } %>
               </div>
-              <a href="/property/<%= property._id %>" class="btn btn-primary py-2 px-3">See details</a>
+              <a href="/property/<%= property._id %>" class="btn btn-primary py-2 px-3">See details</a> 
+              <button class="btn bookmark-btn <%= user && user.bookmark.includes(property._id) ? 'active' : '' %>" data-property-id="<%= property._id %>">
+                <i class="<%= user && user.bookmark.includes(property._id) ? 'fas fa-heart' : 'far fa-heart' %>"></i>
+              </button>              
             </div>
           </div>
         </div>

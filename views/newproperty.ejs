@@ -1,6 +1,6 @@
 <div
   class="hero page-inner overlay"
-  style="background-image: url('/images/hero_bg_3.jpg')"
+  style="background-image: url('images/hero_bg_3.jpg')"
 >
   <div class="container">
     <div class="row justify-content-center align-items-center">
@@ -65,6 +65,12 @@
             <input class="form-control" type="number" placeholder="Latitude" id="location-lat" name="location[lat]">
           </div>
         </div>
+        
+        <!-- Google Map -->
+        <div class="form-group">
+          <label for="map">Map</label>
+          <div id="map" style="height: 300px; width: 100%;"></div>
+        </div>
     
         <button type="button" class="btn btn-primary" onclick="showSection(2)">Next</button>
       </div>
@@ -128,7 +134,7 @@
             <div class="input-group-prepend">
               <span class="input-group-text"><i class="fa fa-list"></i></span>
             </div>
-            <select class="type form-control" name="type" required>
+            <select class="type form-control" name="type" id="type" required onchange="toggleAmenities(this.value)">
               <option value="sell">Sell</option>
               <option value="shortlet">Shortlet</option>
               <option value="rent">Rent</option>
@@ -166,33 +172,35 @@
           </div>
         </div>
     
-        <div class="form-group">
-          <label for="amenities-bed">Beds</label>
-          <div class="input-group">
-            <div class="input-group-prepend">
-              <span class="input-group-text"><i class="fa fa-bed"></i></span>
+        <div id="amenities-section">
+          <div class="form-group">
+            <label for="amenities-bed">Beds</label>
+            <div class="input-group">
+              <div class="input-group-prepend">
+                <span class="input-group-text"><i class="fa fa-bed"></i></span>
+              </div>
+              <input class="quantity-bed form-control" type="number" placeholder="Beds" name="amenities[bed]" id="amenities-bed" value="1">
             </div>
-            <input class="quantity-bed form-control" type="number" placeholder="Beds" name="amenities[bed]" id="amenities-bed" value="1">
           </div>
-        </div>
-    
-        <div class="form-group">
-          <label for="amenities-bath">Baths</label>
-          <div class="input-group">
-            <div class="input-group-prepend">
-              <span class="input-group-text"><i class="fa fa-bath"></i></span>
+      
+          <div class="form-group">
+            <label for="amenities-bath">Baths</label>
+            <div class="input-group">
+              <div class="input-group-prepend">
+                <span class="input-group-text"><i class="fa fa-bath"></i></span>
+              </div>
+              <input class="quantity-bath form-control" type="number" placeholder="Baths" name="amenities[bath]" id="amenities-bath" value="1">
             </div>
-            <input class="quantity-bath form-control" type="number" placeholder="Baths" name="amenities[bath]" id="amenities-bath" value="1">
           </div>
-        </div>
-    
-        <div class="form-group">
-          <label for="amenities-toilet">Toilets</label>
-          <div class="input-group">
-            <div class="input-group-prepend">
-              <span class="input-group-text"><i class="fa fa-toilet"></i></span>
+      
+          <div class="form-group">
+            <label for="amenities-toilet">Toilets</label>
+            <div class="input-group">
+              <div class="input-group-prepend">
+                <span class="input-group-text"><i class="fa fa-toilet"></i></span>
+              </div>
+              <input class="quantity-toilet form-control" type="number" placeholder="Toilets" name="amenities[toilet]" id="amenities-toilet" value="1">
             </div>
-            <input class="quantity-toilet form-control" type="number" placeholder="Toilets" name="amenities[toilet]" id="amenities-toilet" value="1">
           </div>
         </div>
     
@@ -218,3 +226,59 @@
   </div>
 </div>
 
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBK3SY9xB6eYdwvPdsL0iO5KOiJKFzB-m4&libraries=places"></script>
+<script>
+  function initMap() {
+    var map = new google.maps.Map(document.getElementById('map'), {
+      center: { lat: -34.397, lng: 150.644 },
+      zoom: 8
+    });
+    var geocoder = new google.maps.Geocoder();
+    var marker = new google.maps.Marker({
+      position: { lat: -34.397, lng: 150.644 },
+      map: map,
+      draggable: true
+    });
+
+    google.maps.event.addListener(marker, 'dragend', function() {
+      geocodePosition(marker.getPosition(), geocoder);
+    });
+
+    map.addListener('click', function(event) {
+      marker.setPosition(event.latLng);
+      geocodePosition(event.latLng, geocoder);
+    });
+  }
+
+  function geocodePosition(position, geocoder) {
+    geocoder.geocode({ latLng: position }, function(results, status) {
+      if (status == google.maps.GeocoderStatus.OK) {
+        var lat = position.lat();
+        var lng = position.lng();
+        document.getElementById('location-lat').value = lat;
+        document.getElementById('location-lng').value = lng;
+
+        if (results[0]) {
+          var addressComponents = results[0].address_components;
+          for (var i = 0; i < addressComponents.length; i++) {
+            var component = addressComponents[i];
+            var types = component.types;
+            if (types.indexOf('administrative_area_level_1') != -1) {
+              document.getElementById('location-state').value = component.long_name;
+            }
+            if (types.indexOf('locality') != -1) {
+              document.getElementById('location-city').value = component.long_name;
+            }
+            if (types.indexOf('route') != -1) {
+              document.getElementById('location-street').value = component.long_name;
+            }
+          }
+        }
+      }
+    });
+  }
+
+  window.onload = function() {
+    initMap();
+  };
+</script>

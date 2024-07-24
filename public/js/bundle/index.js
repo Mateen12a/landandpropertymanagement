@@ -572,7 +572,9 @@ const formInputTag = document.querySelector(".tags__field-input");
 const tagList = document.querySelector(".tags__field");
 const propertyForm = document.querySelector(".form__property");
 const propertyFormUpdate = document.querySelector(".form__property-update");
-const searchForm = document.querySelector(".find_property")
+const searchForm = document.querySelector(".find_property");
+const bookmarkBtn = document.querySelectorAll(".bookmark-btn");
+const removeBookmarkBtns = document.querySelectorAll('.remove-bookmark-btn');
 const logoutBtn = document.querySelector(".nav__btn--logout");
 const imagesBoxList = document.querySelectorAll(".property__images-box");
 const imageCoverInput = document.querySelector(".imageCover-input");
@@ -582,7 +584,9 @@ const deletePropBtn = document.querySelector(".btn-delete__property");
 const userDataForm = document.querySelector(".form-user-data");
 const userPasswordForm = document.querySelector(".form-user-password");
 const bookmark = document.querySelectorAll(".bookmark");
-const bookmarks = document.querySelectorAll(".bookmarks");
+const updateProfileForm = document.getElementById('updateProfileForm');
+const updatePasswordForm = document.getElementById('updatePasswordForm');
+const updatePhotoForm = document.getElementById('updatePhotoForm');
 let selectedImagesList = [];
 let selectedImageCover = "";
 let numImg = 1;
@@ -640,6 +644,65 @@ if(searchForm) searchForm.addEventListener("submit", async function (e){
       showMessage("error", "Your search query not Found, Try another query.")
     }
 });
+if(bookmarkBtn) {
+    bookmarkBtn.forEach((el)=>el.addEventListener("click", async  (e)=>{
+    e.preventDefault();
+    console.log("Button Clicked")
+    const propertyId = el.getAttribute("data-property-id");
+      const actionType = el.classList.contains("active") ? "remove" : "add";
+
+      await _handleFormSubmit.addBookmark({ bookmark: propertyId }, actionType, el);
+}));
+}
+if (removeBookmarkBtns) {
+    removeBookmarkBtns.forEach((el) => {
+      el.addEventListener("click", async (e) => {
+        e.preventDefault();
+        console.log("Remove Button Clicked");
+        const propertyId = el.getAttribute("data-property-id");
+
+        await _handleFormSubmit.removeBookmark({ bookmark: propertyId }, el);
+
+        // Optionally, remove the card from the DOM after successful removal
+        el.closest('.card').remove();
+      });
+    });
+  } else {
+    console.log("No remove bookmark buttons found.");
+  }
+if (updateProfileForm) {
+    updateProfileForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const formData = new FormData(updateProfileForm);
+
+      await (0, _handleFormSubmit.updateProfileSettings)(formData, "profile");
+    });
+}
+
+if (updatePasswordForm) {
+    updatePasswordForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const passwordCurrent = document.getElementById('passwordCurrent').value;
+        const updatePassword = document.getElementById('updatepassword').value;
+    const updatePasswordConfirm = document.getElementById('updatepasswordConfirm').value;
+      const data = {
+        passwordCurrent,
+        password: updatePassword, // Make sure to match field names in the backend
+        passwordConfirm: updatePasswordConfirm
+      };
+
+      await (0, _handleFormSubmit.updatePasswordSettings)(data, "password");
+    });
+  }
+
+if (updatePhotoForm) {
+    updatePhotoForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const formData = new FormData(updatePhotoForm);
+      
+      await (0, _handleFormSubmit.updatePhotoSettings)(formData, "password");
+    });
+  }
 if (userDataForm) userDataForm.addEventListener("submit", (e)=>{
     e.preventDefault();
     const form = new FormData();
@@ -668,10 +731,12 @@ if (signupForm) signupForm.addEventListener("submit", (e)=>{
     e.preventDefault();
     const name = document.getElementById("account_name").value;
     const email = document.getElementById("account_email").value;
+    const countryCode  = document.getElementById("countryCode").value;
+    const mobileno = document.getElementById("account_mobileno").value;
     const password = document.getElementById("account_password").value;
     const passwordConfirm = document.getElementById("account_passwordConfirm").value;
     const role = document.getElementById("role").value;
-    (0, _login.signup)(name, email, password, passwordConfirm, role);
+    (0, _login.signup)(name, email, countryCode, mobileno, password, passwordConfirm, role);
 });
 if (logoutBtn) logoutBtn.addEventListener("click", (0, _login.logout));
 const fileInput = document.querySelector(".images");
@@ -696,6 +761,30 @@ if (tagList) tagList.addEventListener("click", (e)=>{
         const el = target.closest(".tags__field-tag");
         el.remove();
     }
+});
+const deleteButtons = document.querySelectorAll('.delete-property-btn');
+
+deleteButtons.forEach(button => {
+  button.addEventListener('click', async (event) => {
+    const propertyId = event.target.dataset.propertyId;
+
+    if (confirm('Are you sure you want to delete this property?')) {
+      try {
+        const token = localStorage.getItem('jwt'); // Retrieve the token from cookie
+        const res = await axios.delete(`https://landandpropertymanagement.com/api/v1/property/${id}`,{
+          headers: { Authorization: `Bearer ${token}` }
+        }); 
+
+        if (res.status === 204) { 
+          showAlert('success', 'Property deleted successfully');
+          // Optionally: refresh the list of properties
+          // location.reload(); 
+        }
+      } catch (err) {
+        showAlert('error', err.response?.data?.message || 'Error deleting property');
+      }
+    }
+  });
 });
 if (deletePropBtn) deletePropBtn.addEventListener("click", (e)=>{
     e.preventDefault();
@@ -6657,6 +6746,7 @@ var _axiosHeadersJs = require("../core/AxiosHeaders.js");
 var _axiosHeadersJsDefault = parcelHelpers.interopDefault(_axiosHeadersJs);
 var _speedometerJs = require("../helpers/speedometer.js");
 var _speedometerJsDefault = parcelHelpers.interopDefault(_speedometerJs);
+
 "use strict";
 function progressEventReducer(listener, isDownloadStream) {
     let bytesNotified = 0;
@@ -7431,7 +7521,11 @@ parcelHelpers.export(exports, "formFields", ()=>formFields);
 parcelHelpers.export(exports, "addProperty", ()=>addProperty);
 parcelHelpers.export(exports, "deleteProperty", ()=>deleteProperty);
 parcelHelpers.export(exports, "updateSettings", ()=>updateSettings);
+parcelHelpers.export(exports, "updateProfileSettings", ()=>updateProfileSettings);
+parcelHelpers.export(exports, "updatePasswordSettings", ()=>updatePasswordSettings);
+parcelHelpers.export(exports, "updatePhotoSettings", ()=>updatePhotoSettings);
 parcelHelpers.export(exports, "addBookmark", ()=>addBookmark);
+parcelHelpers.export(exports, "removeBookmark", ()=>removeBookmark);
 var _axios = require("axios");
 var _axiosDefault = parcelHelpers.interopDefault(_axios);
 var _alert = require("./alert");
@@ -7477,7 +7571,7 @@ const addProperty = async (data, type)=>{
             data.append("amenities", JSON.stringify(amenities));
         } else data.append("amenities", JSON.stringify([]));
         const id = window.location.pathname.split("/").find((el)=>el.length > 11 && (el !== "property" || el !== "update"));
-        const url = type === "new" ? "http://127.0.0.1:5000/api/v1/property/new" : `http://127.0.0.1:5000/api/v1/property/${id}`;
+        const url = type === "new" ? "https://landandpropertymanagement.com/api/v1/property/new" : `https://landandpropertymanagement.com/api/v1/property/${id}`;
         const res = await (0, _axiosDefault.default)({
             method: type === "new" ? "POST" : "PATCH",
             url,
@@ -7493,10 +7587,11 @@ const addProperty = async (data, type)=>{
         (0, _alert.showAlert)("error", err.response.data.message);
     }
 };
+
 const deleteProperty = async ()=>{
     try {
         const id = window.location.pathname.split("/").find((el)=>el.length > 11 && (el !== "property" || el !== "update"));
-        const url = `http://127.0.0.1:5000/api/v1/property/${id}`;
+        const url = `https://landandpropertymanagement.com/api/v1/property/${id}`;
         const res = await (0, _axiosDefault.default)({
             url,
             method: "DELETE"
@@ -7513,11 +7608,11 @@ const deleteProperty = async ()=>{
 };
 const updateSettings = async (data, type)=>{
     try {
-        const url = type === "password" ? "http://127.0.0.1:5000/api/v1/users/updateMyPassword/" : "http://127.0.0.1:5000/api/v1/users/updateMe";
+        const url = type === "password" ? "https://landandpropertymanagement.com/api/v1/users/updateMyPassword/" : "https://landandpropertymanagement.com/api/v1/users/updateMe";
         const res = await (0, _axiosDefault.default)({
             method: "PATCH",
             url,
-            data
+            data,
         });
         if (res.data.status === "success") {
             (0, _alert.showAlert)("success", `${type.toUpperCase()} Updated sucessfully`);
@@ -7529,9 +7624,76 @@ const updateSettings = async (data, type)=>{
         (0, _alert.showAlert)("error", err.response.data.message);
     }
 };
+const updateProfileSettings = async (data, type)=>{
+    try {
+        const url = "https://landandpropertymanagement.com/api/v1/users/updateMe";
+        const res = await (0, _axiosDefault.default)({
+            method: "PATCH",
+            url,
+            data,
+            headers: {
+                'Content-Type': 'multipart/form-data'
+            }
+        });
+        if (res.data.status === "success") {
+            (0, _alert.showAlert)("success", `Profile Updated sucessfully`);
+            setTimeout(()=>{
+                window.location.assign("/me");
+            }, 1500);
+        }
+    } catch (err) {
+        (0, _alert.showAlert)("error", err.response.data.message);
+    }
+};
+
+const updatePasswordSettings = async (data, type)=>{
+    try {
+        // const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2OTUwODIyZTczMTU5ZjE2YTUwYzY5ZCIsImlhdCI6MTcyMTgxMzYwMiwiZXhwIjoxNzI5NTg5NjAyfQ.QjAf0q5IXanCebeasnK5gNi5LsR16pLAeZyx7HY7nAo";
+        // console.log("Jwt: ", token)
+        const url = "https://landandpropertymanagement.com/api/v1/users/updateMyPassword";
+        const res = await (0, _axiosDefault.default)({
+            method: "PATCH",
+            url,
+            data,
+            headers: {
+                'Content-Type': 'application/json',
+                // 'Authorization': `Bearer ${token}` 
+            }
+        });
+        if (res.data.status === "success") {
+            (0, _alert.showAlert)("success", `Password Updated sucessfully`);
+            setTimeout(()=>{
+                window.location.assign("/login");
+            }, 1500);
+        }
+    } catch (err) {
+        (0, _alert.showAlert)("error", err.response.data.message);
+    }
+};
+const updatePhotoSettings = async (data, type)=>{
+    try {
+        const url = "https://landandpropertymanagement.com/api/v1/users/updateMe";
+        const res = await (0, _axiosDefault.default)({
+            method: "PATCH",
+            url,
+            data,
+            headers: {
+                'Content-Type': 'multipart/form-data'
+            }
+        });
+        if (res.data.status === "success") {
+            (0, _alert.showAlert)("success", `Photo Updated sucessfully`);
+            setTimeout(()=>{
+                window.location.assign("/me");
+            }, 1500);
+        }
+    } catch (err) {
+        (0, _alert.showAlert)("error", err.response.data.message);
+    }
+};
 const addBookmark = async (data, type, el = null)=>{
     try {
-        const url = type === "add" ? "http://127.0.0.1:5000/api/v1/users/bookMark/add" : "http://127.0.0.1:5000/api/v1/users/bookmark/remove";
+        const url = type === "add" ? "https://landandpropertymanagement.com/api/v1/users/bookMark/add" : "https://landandpropertymanagement.com/api/v1/users/bookmark/remove";
         const res = await (0, _axiosDefault.default)({
             method: "PATCH",
             url,
@@ -7545,6 +7707,31 @@ const addBookmark = async (data, type, el = null)=>{
         (0, _alert.showAlert)("error", err.response.data.message);
     }
 };
+const removeBookmark = async (data, el = null) => {
+    try {
+      const url = "https://landandpropertymanagement.com/api/v1/users/bookMark/remove";
+      
+      const res = await (0, _axiosDefault.default)({
+        method: "PATCH",
+        url,
+        data
+      });
+  
+      if (res.data.status === "success") {
+        el.classList.remove("active");
+        el.innerHTML = '<i class="far fa-heart"></i>'; // Change to outlined heart icon
+        (0, _alert.showAlert)("success", "Bookmark removed");
+        // Reload the page after successful removal
+      setTimeout(() => {
+        window.location.reload();
+      }, 500); // Adjust the timeout duration as needed
+      }
+    } catch (err) {
+        (0, _alert.showAlert)("error", err.response ? err.response.data.message : "An error occurred");
+    }
+  };
+  
+
 
 },{"axios":"5vw73","./alert":"8F2M5","@parcel/transformer-js/src/esmodule-helpers.js":"fofuL"}],"fTUK3":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");

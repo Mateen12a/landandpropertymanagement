@@ -61,15 +61,19 @@ style="background-image: url('images/hero_bg_3.jpg')"
             <div class="form-group">
                 <label for="account_phone">Phone number</label>
                 <div class="input-group">
-                    <div class="input-group-prepend">
-                        <span class="input-group-text"> <i class="fa fa-phone"></i> </span>
-                    </div>
-                    <select class="custom-select" style="max-width: 120px;">
-                        <option selected="">+234</option>
-                    </select>
-                    <input id="account_phone" name="phone" class="form-control" placeholder="Phone number" type="text">
+                  <div class="input-group-prepend">
+                    <span class="input-group-text"> <i class="fa fa-phone"></i> </span>
+                  </div>
+                  <select class="custom-select" name="countryCode" id="countryCode" style="max-width: 120px;">
+                    <option value="+234" selected>Nigeria (+234)</option>
+                    <option value="+1">USA (+1)</option>
+                    <option value="+44">UK (+44)</option>
+                    <option value="+91">Ghana (+233)</option>
+                    <!-- Add more country codes as needed -->
+                  </select>
+                  <input id="account_mobileno" name="mobileno" class="form-control" placeholder="Phone number" type="tel">
                 </div>
-            </div> <!-- form-group// -->
+              </div> <!-- form-group// -->
         
             <div class="form-group">
                 <label for="role">Select account type</label>

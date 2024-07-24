@@ -1,0 +1,162 @@
+<div class="container">
+    <div class="page-inner">
+      </div>
+      <div class="row">
+        <div class="col-md-12">
+          <div class="card">
+            <div class="card-header">
+              <h4 class="card-title">Update Property</h4>
+            </div>
+            <div class="card-body">
+              <form id="updateProperty" class="form__property-update" data-id="<%= user ? user._id : '' %>">
+                <div class="form-group">
+                  <label for="name">Property Name</label>
+                  <input type="text" class="name form-control" id="name" name="name" value="<%= property.name %>" required>
+                </div>
+  
+                <div class="form-group">
+                  <label for="price">Price</label>
+                    <input class="price form-control" type="number" placeholder="Price" id="price" name="price" value="<%= property.price %>" required>
+                  </div>
+                </div>
+  
+                <div class="form-group">
+                  <label for="priceDiscount">Price Discount</label>
+                  <div class="input-group">
+                    <input class="priceDiscount form-control" type="number" placeholder="Price Discount" id="priceDiscount" name="priceDiscount" value="<%= property.priceDiscount %>">
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label for="description">Description</label>
+                  <div class="input-group">
+                    <textarea class="description form-control" placeholder="Description" name="description" id="description" required>
+  <%= property.description %>  
+                    </textarea>
+                  </div>
+                </div>
+  
+                <div class="form-group">
+                  <label for="imageCover">Image Cover</label>
+                  <div class="input-group">
+                    <input class="form-control imageCover-input" type="file" name="imageCover" id="imageCover" accept="image/*">
+                  </div>
+                  <% if (property.imageCover) { %>
+                    <img src="/img/properties/<%= property.imageCover %>" alt="Current Cover" width="150">
+                  <% } %>
+                </div>
+                
+                <div class="form-group">
+                  <label for="images">Images</label>
+                  <div class="input-group">
+                    <input class="images-input form-control" type="file" name="images" id="images" accept="image/*" multiple>
+                  </div>
+                  <% if (property.images && property.images.length > 0) { %>
+                    <div class="row mt-2">
+                      <% property.images.forEach(image => { %>
+                        <div class="col-md-3">
+                          <img src="/img/properties/<%= image %>" alt="Property Image" width="100">
+                        </div>
+                      <% }) %>
+                    </div>
+                  <% } %>
+                </div>
+  
+                <div class="form-group">
+                  <label for="type">Type</label>
+                  <div class="input-group">
+                    <select class="type form-control" name="type" id="type" required onchange="toggleAmenities(this.value)">
+                      <option value="sell" <%= property.type === 'sell' ? 'selected' : '' %>>Sell</option>
+                      <option value="shortlet" <%= property.type === 'shortlet' ? 'selected' : '' %>>Shortlet</option>
+                      <option value="rent" <%= property.type === 'rent' ? 'selected' : '' %>>Rent</option>
+                      <option value="land" <%= property.type === 'land' ? 'selected' : '' %>>Land</option>
+                    </select>
+                  </div>
+                </div>
+  
+                <div id="amenities-section">
+                  <div class="form-group">
+                    <label for="amenities-bed">Beds</label>
+                    <div class="input-group">
+                      <input class="quantity-bed form-control" type="number" placeholder="Beds" name="amenities[bed]" id="amenities-bed" value="<%= property.amenities.find(a => a.amenity === 'bed')?.quantity || 1 %>">
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label for="amenities-bath">Baths</label>
+                    <div class="input-group">
+                      <input class="quantity-bath form-control" type="number" placeholder="Baths" name="amenities[bath]" id="amenities-bath" value="<%= property.amenities.find(a => a.amenity === 'bath')?.quantity || 1 %>">
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label for="amenities-toilet">Toilets</label>
+                    <div class="input-group">
+                      <input class="quantity-toilet form-control" type="number" placeholder="Toilets" name="amenities[toilet]" id="amenities-toilet" value="<%= property.amenities.find(a => a.amenity === 'toilet')?.quantity || 1 %>">
+                    </div>
+                  </div>
+                </div>
+    
+    </div>
+                <div class="form-group">
+                  <label for="status">Status</label>
+                  <select class="status form-control" id="status" name="status" required>
+                    <option value="published" <%= property.status === 'published' ? 'selected' : '' %>>Published</option>
+                    <option value="closed" <%= property.status === 'closed' ? 'selected' : '' %>>Closed</option>
+                  </select>
+                </div>
+  
+  
+                <button type="button" id="updatePropertyBtn" class="btn btn-primary btn-block">Update Property</button> 
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Function to handle form submission
+    const updatePropertyForm = document.getElementById('updatePropertyForm');
+    const updatePropertyBtn = document.getElementById('updatePropertyBtn');
+  
+    updatePropertyBtn.addEventListener('click', async () => {
+      const formData = new FormData(updatePropertyForm);
+      const propertyId = '<%= property._id %>';
+      const token = localStorage.getItem('jwt');
+  
+      try {
+        const res = await axios({
+          method: 'PATCH',
+          url: `http://localhost:5000/api/v1/property/${id}`,
+          data: formData,
+          headers: {
+            'Content-Type': 'multipart/form-data',
+            'Authorization': `Bearer ${token}`
+          }
+        });
+  
+        if (res.data.status === 'success') {
+          showAlert('success', 'Property updated successfully!');
+          // Optionally redirect to the property details page or mylistings page
+          window.location.href = '/profile/listings'; // Adjust the redirect URL as needed
+        }
+      } catch (err) {
+        console.error(err.response.data); // Log the error response for debugging
+        showAlert('error', err.response?.data?.message || 'Error updating property');
+      }
+    });
+  
+  
+     // Toggle amenities section visibility based on property type
+      const toggleAmenities = (type) => {
+        const amenitiesSection = document.getElementById('amenities-section');
+        if (type === 'land') {
+          amenitiesSection.style.display = 'none';
+        } else {
+          amenitiesSection.style.display = 'block';
+        }
+      };
+    
+      // Initially hide the amenities section if property type is land
+      toggleAmenities('<%= property.type %>');
+  </script>
+  

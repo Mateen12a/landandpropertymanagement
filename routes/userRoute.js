@@ -17,6 +17,8 @@ router
     authController.protect,
     userController.removeBookmark
   );
+  router.get('/bookmarks', authController.protect, userController.getBookmarks);
+
 router.get(
   "/me",
   authController.isLoggedIn,

@@ -111,12 +111,14 @@ if (signupForm)
 
     const name = document.getElementById("account_name").value;
     const email = document.getElementById("account_email").value;
+    const mobileno = document.getElementById("account_mobileno").value;
+    const countryCode  = document.getElementById("countryCode").value;
     const password = document.getElementById("account_password").value;
     const passwordConfirm = document.getElementById(
       "account_passwordConfirm"
     ).value;
     const role = document.getElementById("role").value;
-    signup(name, email, password, passwordConfirm, role);
+    signup(name, email, countryCode, mobileno, password, passwordConfirm, role);
   });
 
 if (logoutBtn) logoutBtn.addEventListener("click", logout);
@@ -326,3 +328,52 @@ bookmark.forEach((el) =>
     }
   })
 );
+document.addEventListener('DOMContentLoaded', () => {
+  const bookmarkBtns = document.querySelectorAll('.bookmark-btn');
+
+  bookmarkBtns.forEach(btn => {
+      btn.addEventListener('click', async function() {
+          const propertyId = this.dataset.propertyId;
+          const token = Cookies.get('jwt');
+
+          try {
+              const url = this.classList.contains('active') 
+                  ? `http://localhost:5000/api/v1/users/bookmark/remove/${propertyId}` 
+                  : `http://localhost:5000/api/v1/users/bookmark/add/${propertyId}`;
+
+              const res = await axios({
+                  method: "PATCH",
+                  url,
+                  headers: { 'Authorization': `Bearer ${token}` }
+              });
+
+              if (res.data.status === 'success') {
+                  this.classList.toggle('active'); // Toggle active class
+                  this.querySelector('i').classList.toggle('far'); // Toggle between far and fas
+                  this.querySelector('i').classList.toggle('fas');
+
+                  showAlert('success', `Bookmark ${this.classList.contains('active') ? 'added' : 'removed'}`);
+              }
+          } catch (error) {
+              showAlert('error', error.response?.data?.message || 'Failed to update bookmark');
+          }
+      });
+  });
+});
+
+
+export const fetchBookmarks = async () => {
+  try {
+      const token = Cookies.get('jwt');
+      const response = await axios({
+          method: 'GET',
+          url: '/api/v1/users/mybookmarks',
+          headers: { 'Authorization': `Bearer ${token}` }
+      });
+
+      return response.data.data.bookmarks;
+  } catch (err) {
+      showAlert('error', err.response?.data?.message || 'Failed to fetch bookmarks');
+      return []; 
+  }
+};

@@ -50,15 +50,15 @@ app.use((req, res, next) => {
     req.requestTime = new Date().toISOString();
     next();
 });
-
+// Apply isLoggedIn middleware globally
+app.use(authController.isLoggedIn);
 // Api routes
 app.use("/api/v1/users", userRouter);
 app.use("/api/v1/property", propertyRouter);
 
 // Main routes
 app.use('/', mainRouter);
-// Apply isLoggedIn middleware globally
-app.use(authController.isLoggedIn);
+
 app.all("*", (req, res, next) => {
     next(new AppError(`Can't find ${req.originalUrl} on this server!`, 404));
   });

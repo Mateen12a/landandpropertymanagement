@@ -15,6 +15,16 @@ const userSchema = new mongoose.Schema({
     lowercase: true,
     validate: [validator.isEmail, "Please provide a valid email"],
   },
+  countryCode: {
+    type: String,
+    required: [true, "Please provide your country code"],
+    validate: [validator.isNumeric, "Please provide a valid country code"],
+  },
+  mobileno: {
+    type: String,
+    required: [true, "Please provide your mobile number"],
+    validate: [validator.isNumeric, "Please provide a valid mobile number"],
+  },
   photo: {
     type: String,
     default: "default.jpg",
@@ -58,10 +68,15 @@ const userSchema = new mongoose.Schema({
   bookmark: [{ type: mongoose.Schema.ObjectId, ref: "Property" }],
 });
 
+// Virtual property for full phone number
+userSchema.virtual('fullPhoneNumber').get(function() {
+  return `${this.countryCode}${this.mobileno}`;
+});
+
 userSchema.pre("save", async function (next) {
   if (!this.isModified("password")) return next();
 
-  //hash password
+  // Hash password
   this.password = await bcrypt.hash(this.password, 12);
 
   this.passwordConfirm = undefined;
@@ -97,7 +112,7 @@ userSchema.methods.changedPasswordAfter = function (JWTTimeStamp) {
     return JWTTimeStamp < changedTimeStamp;
   }
 
-  //false means not changed
+  // False means not changed
   return false;
 };
 

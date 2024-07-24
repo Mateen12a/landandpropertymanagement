@@ -104,6 +104,19 @@ const propertySchema = new mongoose.Schema({
     monthlyPayment: Number,
     duration: Number, // Duration in months
   },
+  views: {
+    type: Number,
+    default: 0 
+  },
+  status: {
+    type: String,
+    enum: ['published', 'closed'], // Possible values for status
+    default: 'published'           // Default status when creating a property
+  },
+  bookmarkCount: {
+    type: Number,
+    default: 0
+  }
 });
 
 propertySchema.pre("save", function (next) {

@@ -1,4 +1,5 @@
 import axios from "axios";
+import Cookies from 'js-cookie';
 import { showAlert } from "./alert";
 
 // login.js
@@ -11,6 +12,11 @@ document.getElementById('loginForm').addEventListener('submit', async (e) => {
   const email = document.getElementById('email').value;
   const password = document.getElementById('password').value;
 
+  // Basic validation
+  if (!email || !password) {
+    return showAlert('error', 'Please provide both email and password');
+  }
+
   try {
     const res = await axios({
       method: 'POST',
@@ -22,17 +28,24 @@ document.getElementById('loginForm').addEventListener('submit', async (e) => {
     });
 
     if (res.data.status === 'success') {
-      sessionStorage.setItem('jwt', res.data.token); // Store the token in local storage
+      // Store the JWT token in local storage
+      localStorage.setItem('jwt', res.data.token);
+      // Store the agent ID in localStorage
+      localStorage.setItem('agentId', res.data.data.user._id); // Assuming the backend returns the user ID 
+      Cookies.set('jwt', res.data.token, { expires: 90 }); // Set cookie for 90 days
       showAlert('success', 'Logged in successfully');
-      console.log("Stored Token", res.data.token)
+      console.log("Stored Token", res.data.token);
+
+      // Redirect to home page after successful login
       setTimeout(() => {
         window.location.assign('/');
       }, 1500);
     }
   } catch (err) {
-    showAlert('error', err.response.data.message);
+    showAlert('error', err.response?.data?.message || 'Login failed. Please try again.');
   }
 });
+
 
 
 export const logout = async () => {

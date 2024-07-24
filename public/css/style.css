@@ -9573,7 +9573,15 @@ textarea.form-control-lg {
   -moz-transform: rotate(45deg);
   filter: progid:DXImageTransform.Microsoft.BasicImage(rotation=5);
   /*for IE*/ }
-
+.js-clone-nav{
+  margin-top: 13px;
+}
+.mt-10{
+  margin-top: 120px;
+}
+.nav-merge-top{
+  margin-top: 15px;
+}
 .burger.active:after {
   -webkit-transform: rotate(-45deg);
   -moz-transform: rotate(-45deg);

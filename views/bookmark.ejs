@@ -1,0 +1,30 @@
+<div class="container">
+  <div class="page-inner">
+    <div class="page-header">
+      <h3 class="fw-bold mb-3">My Bookmarks</h3>
+    </div>
+    <% if (!properties || properties.length === 0) { %>
+      <p class="text-center">You haven't bookmarked any properties yet.</p>
+    <% } else { %>
+      <div class="row">
+        <% properties.forEach(property => { %>
+          <div class="col-md-4">
+            <div class="card mb-4">
+              <% if (property.images && property.images.length > 0) { %>
+                <img src="/img/properties/<%= property.images[0] %>" class="card-img-top" alt="<%= property.name %>">
+              <% } %>
+              <div class="card-body">
+                <h5 class="card-title"><%= property.name %></h5>
+                <p class="card-text">Views: <%= property.views %></p>
+                <a href="/property/<%= property._id %>" class="btn btn-primary">View Details</a>
+                <button class="remove-bookmark-btn btn btn-danger" data-property-id="<%= property._id %>">
+                  <i class="far fa-heart"></i> Remove Bookmark
+                </button>
+              </div>
+            </div>
+          </div>
+        <% }) %>
+      </div>
+    <% } %>
+  </div>
+</div>

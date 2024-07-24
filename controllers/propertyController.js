@@ -1,4 +1,5 @@
 const uuid = require("uuid");
+const mongoose = require("mongoose")
 const multer = require("multer");
 const sharp = require("sharp");
 const Property = require("../models/propertyModel");
@@ -116,11 +117,23 @@ exports.createProperty = catchAsync(async (req, res, next) => {
     "description",
     "agent"
   );
+  // Get the currently logged-in user's ID
+  const currentUserId = req.user.id; // Assuming you have middleware to authenticate and set req.user
+  console.log("current User", currentUserId)
+  // Validate that the user is an agent or admin
+  const user = await User.findById(currentUserId);
+  if (user.role !== 'agent' && user.role !== 'admin') {
+    return next(new AppError('Only agents and admins can create properties', 403));
+  }
 
-  const property = await Property.create(filteredBody);
-  console.log("Property body: ", property)
+   // Create the property with the user as the agent
+   const property = await Property.create({
+    ...filteredBody,
+    agent: currentUserId 
+  });
+
   res.status(201).json({
-    status: "success",
+    status: 'success',
     data: {
       data: property,
     },
@@ -132,7 +145,8 @@ exports.getProperty = catchAsync(async (req, res, next) => {
     path: "agent",
     fields: "name companyName",
   });
-  
+  property.views += 1;
+  await property.save();
   res.status(200).json({
     status: "success",
     data: {
@@ -216,7 +230,7 @@ exports.deleteProperty = catchAsync(async (req, res, next) => {
 exports.updateProperty = catchAsync(async (req, res, next) => {
   req.body.amenities = JSON.parse(req.body.amenities);
   req.body.location = JSON.parse(req.body.location);
-  req.body.agent = req.user;
+  
   const filteredBody = filterObj(
     req.body,
     "name",
@@ -230,9 +244,15 @@ exports.updateProperty = catchAsync(async (req, res, next) => {
     "type",
     "location",
     "description",
-    "agent"
+    "agent",
+    "status"
   );
-
+  const user = await User.findById(currentUserId);
+    if (user.role !== "agent" && user.role !== "admin") {
+      return next(
+        new AppError("Only agents and admins can update properties", 403)
+      );
+    }
   const property = await Property.findByIdAndUpdate(
     req.params.id,
     filteredBody,
@@ -249,3 +269,49 @@ exports.updateProperty = catchAsync(async (req, res, next) => {
     },
   });
 });
+
+exports.getPropertiesByAgent = catchAsync(async (req, res, next) => {
+  const agentId = req.params.agentId; // Get agent ID from the URL parameter
+
+  // Validate agentId 
+  if (!agentId) {
+    return next(new AppError('Invalid agent ID', 400));
+  }
+
+  // Find properties by agent, populate the 'agent' field for agent details
+  const properties = await Property.find({ agent: agentId }).populate({
+    path: 'agent',
+    select: 'name companyName' // Select specific fields to populate
+  });
+
+  res.status(200).json({
+    status: 'success',
+    results: properties.length, // Include the number of results for convenience
+    data: {
+      properties,
+    },
+  });
+});
+exports.getTotalViewsByAgent = catchAsync(async (req, res, next) => {
+  const agentId = req.params.agentId;
+
+  // Validate agentId 
+  if (!agentId) {
+    return next(new AppError('Invalid agent ID', 400));
+  }
+
+  const result = await Property.aggregate([
+    { $match: { agent: new mongoose.Types.ObjectId(agentId) } }, // Filter by agent
+    { $group: { _id: null, totalViews: { $sum: "$views" } } } // Sum the views
+  ]);
+
+  const totalViews = result.length > 0 ? result[0].totalViews : 0; // Handle case where no properties are found
+
+  res.status(200).json({
+    status: 'success',
+    data: {
+      totalViews,
+    },
+  });
+});
+

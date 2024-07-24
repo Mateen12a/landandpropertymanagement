@@ -4,12 +4,15 @@ const authController = require("../controllers/authController");
 
 const route = express.Router();
 
-route.get("/search", propertyController.searchProperties);
+route.get("/search", propertyController.searchProperties)
+      .get('/agent/:agentId', propertyController.getPropertiesByAgent)
+      .get('/agent/total-views/:agentId', propertyController.getTotalViewsByAgent);;
 route.post(
-  "/new",
+  "/new", authController.protect,
   propertyController.uploadPropertyImages,
   propertyController.resizePropertyImages,
-  propertyController.createProperty
+  propertyController.createProperty,
+ 
 );
 
 route
