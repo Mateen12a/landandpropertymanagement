@@ -17,8 +17,7 @@ const userSchema = new mongoose.Schema({
   },
   countryCode: {
     type: String,
-    required: [true, "Please provide your country code"],
-    validate: [validator.isNumeric, "Please provide a valid country code"],
+    required: [true, "Please provide your country code"]
   },
   mobileno: {
     type: String,

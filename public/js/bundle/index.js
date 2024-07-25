@@ -736,6 +736,17 @@ if (signupForm) signupForm.addEventListener("submit", (e)=>{
     const password = document.getElementById("account_password").value;
     const passwordConfirm = document.getElementById("account_passwordConfirm").value;
     const role = document.getElementById("role").value;
+
+    // Log collected data for debugging
+    // console.log('Collected Data:', {
+    //     name,
+    //     email,
+    //     countryCode,
+    //     mobileno,
+    //     password,
+    //     passwordConfirm,
+    //     role
+    //   });
     (0, _login.signup)(name, email, countryCode, mobileno, password, passwordConfirm, role);
 });
 if (logoutBtn) logoutBtn.addEventListener("click", (0, _login.logout));
@@ -3252,15 +3263,27 @@ const logout = async ()=>{
         (0, _alert.showAlert)("error", "Error logging out! Try again.");
     }
 };
-const signup = async (name, email, password, passwordConfirm, role)=>{
+const signup = async (name, email, countryCode, mobileno, password, passwordConfirm, role)=>{
     try {
         const data = {
             name,
             email,
+            countryCode,
+            mobileno,
             password,
             passwordConfirm,
             role
         };
+    //     // Log collected data for debugging
+    // console.log('Posted Data:', {
+    //     name,
+    //     email,
+    //     countryCode,
+    //     mobileno,
+    //     password,
+    //     passwordConfirm,
+    //     role
+    //   });
         const res = await (0, _axiosDefault.default)({
             method: "POST",
             url: "/api/v1/users/signup",

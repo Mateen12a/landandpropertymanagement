@@ -35,14 +35,32 @@ const createSendToken = (user, statusCode, res) => {
 };
 
 exports.signup = catchAsync(async (req, res, next) => {
+  // Destructure necessary properties from req.body
+  const {
+    name,
+    email,
+    countryCode,
+    mobileno,
+    role,
+    password,
+    passwordConfirm,
+    passwordChangedAt
+  } = req.body;
+
+  // Log received data for debugging
+  // console.log('Received data:', req.body);
+
+
+  // Create a new user with the destructured properties
   const newUser = await User.create({
-    name: req.body.name,
-    email: req.body.email,
-    role: req.body.role,
-    contact: req.body.contact,
-    password: req.body.password,
-    passwordConfirm: req.body.passwordConfirm,
-    passwordChangedAt: req.body.passwordChangedAt,
+    name,
+    email,
+    role,
+    countryCode,
+    mobileno,
+    password,
+    passwordConfirm,
+    passwordChangedAt
   });
 
   createSendToken(newUser, 201, res);
@@ -85,18 +103,18 @@ exports.protect = catchAsync(async (req, res, next) => {
   // 2. Check if token is in cookies
   else if (req.cookies.jwt) {
     token = req.cookies.jwt;
-      // console.log('Token from cookie:', token); // Debug log to check token from cookie
+      console.log('Token from cookie:', token); // Debug log to check token from cookie
   }
   else if (req.query.token) { // Check for token in query parameters as a fallback
     token = req.query.token;
-    // console.log('Token from query:', token); // Debug log to check token from query
+    console.log('Token from query:', token); // Debug log to check token from query
 }
 
   // 3. If token is not provided, log the error and send a response
   if (!token) {
     if (!token) {
       // console.log("No token provided:");
-      // console.log("Headers:", req.headers); // Log all headers for debugging
+      console.log("Headers:", req.headers); // Log all headers for debugging
       // console.log("Cookies:", req.cookies); // Log all cookies for debugging
       return next(new AppError("You are not logged in, please log in to get access", 401));
   }
@@ -125,33 +143,31 @@ exports.protect = catchAsync(async (req, res, next) => {
 });
 
 exports.isLoggedIn = async (req, res, next) => {
-  // console.log('Inside isLoggedIn Middleware');
-  // console.log('Cookies:', req.cookies);
-
-  if (req.cookies && req.cookies.jwt) {
+  if (req.cookies.jwt) {
     try {
-      const decoded = await promisify(jwt.verify)(
-        req.cookies.jwt,
-        'my-ultra-secure-and-ultra-long-secret-two'
-      );
+      const token = req.cookies.jwt;
 
+      // Verify token
+      const decoded = await promisify(jwt.verify)(token, "my-ultra-secure-and-ultra-long-secret-two");
+
+      // Check if user still exists
       const currentUser = await User.findById(decoded.id);
-
       if (!currentUser) {
         res.locals.user = null;
         return next();
       }
 
+      // Check if user changed password after the token was issued
       if (currentUser.changedPasswordAfter(decoded.iat)) {
         res.locals.user = null;
         return next();
       }
 
+      // There is a logged-in user
       res.locals.user = currentUser;
-      // console.log('User set in res.locals:', res.locals.user);
       return next();
-    } catch (error) {
-      console.error('Error verifying JWT:', error);
+    } catch (err) {
+      console.error('Error verifying JWT:', err);
       res.locals.user = null;
       return next();
     }

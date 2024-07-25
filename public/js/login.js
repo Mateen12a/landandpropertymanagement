@@ -68,15 +68,17 @@ export const logout = async () => {
   }
 };
 
-export const signup = async (name, email, password, passwordConfirm, role) => {
+export const signup = async (name, email, countryCode, mobileno, password, passwordConfirm, role) => {
   try {
     const data = {
       name,
       email,
+      countryCode,
+      mobileno,
       password,
       passwordConfirm,
-      role,
-    };
+      role
+  };
     const res = await axios({
       method: "POST",
       url: "/api/v1/users/signup",

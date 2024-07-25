@@ -97,7 +97,9 @@ exports.newProperty = (req, res) => {
       fields: "name companyName logo contact role",
     });
     // console.log("the current prroperty details is :", property)
-  
+    property.views += 1;
+    await property.save();
+
     res.status(200).render("singleproperty", {
       title: property.name,
       property: property,
