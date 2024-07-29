@@ -109,6 +109,33 @@ const updateProperty = async (data, id) => {
     } else {
       data.append("amenities", JSON.stringify([]));
     }
+<<<<<<< HEAD
+=======
+    sessionStorage.setItem('agentId', agentId);
+
+// During property creation, retrieve agent ID from session storage
+const agentId = sessionStorage.getItem('agentId');
+if (!agentId) {
+  showAlert("error", "No agent ID found. Please log in again.");
+  return;
+}
+
+// Include agent ID in the data sent to the backend
+data.append("agent", agentId);
+    data.append("agent", agentId);
+
+    const id = window.location.pathname.split("/").find((el) => el.length > 11 && (el !== "property" && el !== "update"));
+
+    const url = type === "new"
+      ? "https://landandpropertymanagement.com/api/v1/property/new"
+      : `https://landandpropertymanagement.com/api/v1/property/${id}`;
+
+    const token = sessionStorage.getItem('jwt'); // Retrieve the token from localStorage
+    if (!token) {
+      console.log("No authentication token found. Please log in again.");
+      return showAlert("error", "No authentication token found. Please log in again.");
+    }
+>>>>>>> d8bbd524af2c9af6314c0e019afdcbd4dddb2f72
 
     const url = `http://landandpropertymanagement.com/api/v1/property/${id}`;
     const res = await axios({
@@ -135,8 +162,13 @@ const updateProperty = async (data, id) => {
 export const deleteProperty = async () => {
   try {
     const id = window.location.pathname.split("/").find((el) => el.length > 11 && (el !== "property" && el !== "update"));
+<<<<<<< HEAD
     const url = `http://landandpropertymanagement.com/api/v1/property/${id}`;
     const token = localStorage.getItem('jwt'); // Retrieve the token from localStorage
+=======
+    const url = `https://landandpropertymanagement.com/api/v1/property/${id}`;
+    const token = sessionStorage.getItem('jwt'); // Retrieve the token from localStorage
+>>>>>>> d8bbd524af2c9af6314c0e019afdcbd4dddb2f72
 
     if (!token) {
       showAlert("error", "No authentication token found. Please log in again.");
@@ -168,8 +200,13 @@ export const updateSettings = async (data, type) => {
   try {
     const url =
       type === "password"
+<<<<<<< HEAD
         ? "http://landandpropertymanagement.com/api/v1/users/updateMyPassword/"
         : "http://landandpropertymanagement.com/api/v1/users/updateMe";
+=======
+        ? "https://landandpropertymanagement.com/api/v1/users/updateMyPassword/"
+        : "https://landandpropertymanagement.com/api/v1/users/updateMe";
+>>>>>>> d8bbd524af2c9af6314c0e019afdcbd4dddb2f72
 
     const token = localStorage.getItem('jwt'); // Retrieve the token from localStorage
 
@@ -204,8 +241,20 @@ export const addBookmark = async (data, type, el = null) => {
   try {
     const url =
       type === "add"
+<<<<<<< HEAD
         ? "http://landandpropertymanagement.com/api/v1/users/bookMark/add"
         : "http://landandpropertymanagement.com/api/v1/users/bookMark/remove";
+=======
+        ? "https://landandpropertymanagement.com/api/v1/users/bookMark/add"
+        : "https://landandpropertymanagement.com/api/v1/users/bookmark/remove";
+
+    const token = sessionStorage.getItem('jwt'); // Retrieve the token from localStorage
+
+    if (!token) {
+      showAlert("error", "No authentication token found. Please log in again.");
+      return;
+    }
+>>>>>>> d8bbd524af2c9af6314c0e019afdcbd4dddb2f72
 
     const res = await axios({
       method: "PATCH",

@@ -7797,6 +7797,7 @@ const updateProperty = async (data, id) => {
           (0, _alert.showAlert)("error", err.response ? err.response.data.message : "An error occurred");
       }
     };
+<<<<<<< HEAD
     
   
   
@@ -7829,3 +7830,319 @@ const updateProperty = async (data, id) => {
   
   //# sourceMappingURL=index.js.map
   
+=======
+}
+exports.default = spread;
+
+},{"@parcel/transformer-js/src/esmodule-helpers.js":"fofuL"}],"9PotX":[function(require,module,exports) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+var _utilsJs = require("./../utils.js");
+var _utilsJsDefault = parcelHelpers.interopDefault(_utilsJs);
+"use strict";
+function isAxiosError(payload) {
+    return (0, _utilsJsDefault.default).isObject(payload) && payload.isAxiosError === true;
+}
+exports.default = isAxiosError;
+
+},{"./../utils.js":"5ZdVM","@parcel/transformer-js/src/esmodule-helpers.js":"fofuL"}],"hcQh3":[function(require,module,exports) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+const HttpStatusCode = {
+    Continue: 100,
+    SwitchingProtocols: 101,
+    Processing: 102,
+    EarlyHints: 103,
+    Ok: 200,
+    Created: 201,
+    Accepted: 202,
+    NonAuthoritativeInformation: 203,
+    NoContent: 204,
+    ResetContent: 205,
+    PartialContent: 206,
+    MultiStatus: 207,
+    AlreadyReported: 208,
+    ImUsed: 226,
+    MultipleChoices: 300,
+    MovedPermanently: 301,
+    Found: 302,
+    SeeOther: 303,
+    NotModified: 304,
+    UseProxy: 305,
+    Unused: 306,
+    TemporaryRedirect: 307,
+    PermanentRedirect: 308,
+    BadRequest: 400,
+    Unauthorized: 401,
+    PaymentRequired: 402,
+    Forbidden: 403,
+    NotFound: 404,
+    MethodNotAllowed: 405,
+    NotAcceptable: 406,
+    ProxyAuthenticationRequired: 407,
+    RequestTimeout: 408,
+    Conflict: 409,
+    Gone: 410,
+    LengthRequired: 411,
+    PreconditionFailed: 412,
+    PayloadTooLarge: 413,
+    UriTooLong: 414,
+    UnsupportedMediaType: 415,
+    RangeNotSatisfiable: 416,
+    ExpectationFailed: 417,
+    ImATeapot: 418,
+    MisdirectedRequest: 421,
+    UnprocessableEntity: 422,
+    Locked: 423,
+    FailedDependency: 424,
+    TooEarly: 425,
+    UpgradeRequired: 426,
+    PreconditionRequired: 428,
+    TooManyRequests: 429,
+    RequestHeaderFieldsTooLarge: 431,
+    UnavailableForLegalReasons: 451,
+    InternalServerError: 500,
+    NotImplemented: 501,
+    BadGateway: 502,
+    ServiceUnavailable: 503,
+    GatewayTimeout: 504,
+    HttpVersionNotSupported: 505,
+    VariantAlsoNegotiates: 506,
+    InsufficientStorage: 507,
+    LoopDetected: 508,
+    NotExtended: 510,
+    NetworkAuthenticationRequired: 511
+};
+Object.entries(HttpStatusCode).forEach(([key, value])=>{
+    HttpStatusCode[value] = key;
+});
+exports.default = HttpStatusCode;
+
+},{"@parcel/transformer-js/src/esmodule-helpers.js":"fofuL"}],"8F2M5":[function(require,module,exports) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+parcelHelpers.export(exports, "hideAlert", ()=>hideAlert);
+parcelHelpers.export(exports, "showAlert", ()=>showAlert);
+const hideAlert = ()=>{
+    const el = document.querySelector(".alert");
+    if (el) el.parentElement.removeChild(el);
+};
+const showAlert = (type, msg)=>{
+    hideAlert();
+    const markup = `<div class="alert alert--${type}">${msg}</div>`;
+    document.querySelector("body").insertAdjacentHTML("afterbegin", markup);
+    window.setTimeout(hideAlert, 2500);
+};
+
+},{"@parcel/transformer-js/src/esmodule-helpers.js":"fofuL"}],"cAvSW":[function(require,module,exports) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+parcelHelpers.export(exports, "handleFormTag", ()=>handleFormTag);
+const formInputTag = document.querySelector(".tags__field-input");
+const formList = document.querySelector(".tags__field");
+function handleFormTag(event) {
+    if (event.key === "," || event.code === "Comma" || event.code === "Unidentified") {
+        formInputTag.value.split(",").map((tag)=>tag.trim()).forEach((el)=>{
+            if (el !== "") {
+                // Skip empty tags
+                const markup = `
+              <li class="tags__field-tag">
+                  <span class="chec-tag">
+                    ${el}
+                  </span>
+                  <button type="button" title="Dismiss" class="chec-tag__dismiss">
+                          X
+                  </button>
+              </li>
+              `;
+                formList.insertAdjacentHTML("beforeend", markup);
+            }
+        });
+        formInputTag.value = "";
+    }
+    if (event.key === "Delete" || event.key === "Backspace") {
+        const list = document.querySelector("#tags__field");
+        const lastEl = list.children[list.children.length - 1];
+        if (lastEl) lastEl.remove();
+    }
+}
+
+},{"@parcel/transformer-js/src/esmodule-helpers.js":"fofuL"}],"kTXqU":[function(require,module,exports) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+parcelHelpers.export(exports, "truncateText", ()=>truncateText);
+const truncateText = (selector, maxLength)=>{
+    const elements = document.querySelectorAll(selector);
+    elements.forEach((element)=>{
+        const text = element.textContent;
+        const fileInput = document.querySelector(".images");
+        const selectedFilesContainer = document.querySelector(".selectedFiles");
+        if (fileInput) fileInput.addEventListener("change", (event)=>{
+            selectedFilesContainer.innerHTML = "";
+            const files = event.target.files;
+            for(let i = 0; i < files.length; i++){
+                const file = files[i];
+                const fileName = file.name;
+                const fileItem = document.createElement("span");
+                fileItem.textContent = fileName;
+                selectedFilesContainer.appendChild(fileItem);
+            }
+        });
+        if (text.length > maxLength) {
+            const truncatedText = text.substring(0, maxLength) + "...";
+            element.textContent = truncatedText;
+        }
+    });
+};
+
+},{"@parcel/transformer-js/src/esmodule-helpers.js":"fofuL"}],"7AHMc":[function(require,module,exports) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+parcelHelpers.export(exports, "formFields", ()=>formFields);
+parcelHelpers.export(exports, "addProperty", ()=>addProperty);
+parcelHelpers.export(exports, "deleteProperty", ()=>deleteProperty);
+parcelHelpers.export(exports, "updateSettings", ()=>updateSettings);
+parcelHelpers.export(exports, "addBookmark", ()=>addBookmark);
+var _axios = require("axios");
+var _axiosDefault = parcelHelpers.interopDefault(_axios);
+var _alert = require("./alert");
+const formFields = (imageCover, imageList)=>{
+    const form = new FormData();
+    const location = {
+        state: document.querySelector(".location-state").value,
+        city: document.querySelector(".location-city").value,
+        street: document.querySelector(".location-street").value
+    };
+    const tags = [
+        ...document.querySelectorAll(".chec-tag")
+    ].map((el)=>el.textContent.trim());
+    form.append("name", document.querySelector(".name").value);
+    form.append("price", +document.querySelector(".price").value.trim());
+    form.append("priceDiscount", +document.querySelector(".priceDiscount").value.trim());
+    form.append("description", document.querySelector(".description").value.trim());
+    form.append("area", document.querySelector(".area").value.trim());
+    form.append("type", document.querySelector(".type").value.trim());
+    tags.forEach((tag)=>form.append("tags", tag));
+    form.append("location", JSON.stringify(location));
+    form.append("imageCover", imageCover);
+    for(let i = 0; i < imageList.length; i++)form.append("images", imageList[i]);
+    return form;
+};
+const addProperty = async (data, type)=>{
+    try {
+        if (document.querySelector(".type").value.trim().toLowerCase() !== "land") {
+            const amenities = [
+                {
+                    amenity: `${type === "new" ? "bed" : document.querySelector(".amenity-bed").dataset.amenity}`,
+                    quantity: +document.querySelector(".quantity-bed").value.trim()
+                },
+                {
+                    amenity: `${type === "new" ? "bath" : document.querySelector(".amenity-bath").dataset.amenity}`,
+                    quantity: +document.querySelector(".quantity-bath").value.trim()
+                },
+                {
+                    amenity: `${type === "new" ? "toilet" : document.querySelector(".amenity-toilet").dataset.amenity}`,
+                    quantity: +document.querySelector(".quantity-toilet").value.trim()
+                }
+            ];
+            data.append("amenities", JSON.stringify(amenities));
+        } else data.append("amenities", JSON.stringify([]));
+        const id = window.location.pathname.split("/").find((el)=>el.length > 11 && (el !== "property" || el !== "update"));
+        const url = type === "new" ? "https://landandpropertymanagement.com/api/v1/property/new" : `https://landandpropertymanagement.com/api/v1/property/${id}`;
+        const res = await (0, _axiosDefault.default)({
+            method: type === "new" ? "POST" : "PATCH",
+            url,
+            data
+        });
+        if (res.data.status === "success") {
+            (0, _alert.showAlert)("success", "Updated Successfully");
+            setTimeout(()=>{
+                window.location.assign(`/property/${res.data.data.data._id}`);
+            }, 5000);
+        }
+    } catch (err) {
+        (0, _alert.showAlert)("error", err.response.data.message);
+    }
+};
+const deleteProperty = async ()=>{
+    try {
+        const id = window.location.pathname.split("/").find((el)=>el.length > 11 && (el !== "property" || el !== "update"));
+        const url = `https://landandpropertymanagement.com/api/v1/property/${id}`;
+        const res = await (0, _axiosDefault.default)({
+            url,
+            method: "DELETE"
+        });
+        if (res.status === 204) {
+            (0, _alert.showAlert)("success", "Deleted");
+            setTimeout(()=>{
+                window.location.assign("/");
+            }, 1500);
+        }
+    } catch (err) {
+        (0, _alert.showAlert)("error", err.response.data.message);
+    }
+};
+const updateSettings = async (data, type)=>{
+    try {
+        const url = type === "password" ? "https://landandpropertymanagement.com/api/v1/users/updateMyPassword/" : "https://landandpropertymanagement.com/api/v1/users/updateMe";
+        const res = await (0, _axiosDefault.default)({
+            method: "PATCH",
+            url,
+            data
+        });
+        if (res.data.status === "success") {
+            (0, _alert.showAlert)("success", `${type.toUpperCase()} Updated sucessfully`);
+            setTimeout(()=>{
+                window.location.assign("/me");
+            }, 1500);
+        }
+    } catch (err) {
+        (0, _alert.showAlert)("error", err.response.data.message);
+    }
+};
+const addBookmark = async (data, type, el = null)=>{
+    try {
+        const url = type === "add" ? "https://landandpropertymanagement.com/api/v1/users/bookMark/add" : "https://landandpropertymanagement.com/api/v1/users/bookmark/remove";
+        const res = await (0, _axiosDefault.default)({
+            method: "PATCH",
+            url,
+            data
+        });
+        if (res.data.status === "success") {
+            if (type === "add") el.classList.add("active");
+            (0, _alert.showAlert)("success", `Bookmark ${type === "add" ? "added" : "removed"}`);
+        }
+    } catch (err) {
+        (0, _alert.showAlert)("error", err.response.data.message);
+    }
+};
+
+},{"axios":"5vw73","./alert":"8F2M5","@parcel/transformer-js/src/esmodule-helpers.js":"fofuL"}],"fTUK3":[function(require,module,exports) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+parcelHelpers.export(exports, "handleImagePreview", ()=>handleImagePreview);
+function handleImagePreview(previewContainer, files, numImg) {
+    if (previewContainer.classList.contains("property__images-box--imageCover")) {
+        const reader = new FileReader();
+        reader.onload = (e)=>{
+            const img = `<div class="property__images property__images-imageCover"><img class="cur__prop-img cur__prop-imageCover" src="${e.target.result}"><button class="property__img-delete" style="display: none;">Delete</button></div>`;
+            previewContainer.innerHTML = "";
+            previewContainer.insertAdjacentHTML("beforeend", img);
+        };
+        reader.readAsDataURL(files);
+    }
+    if (previewContainer.classList.contains("property__images-box-images")) for(let i = 0; i < files.length; i++){
+        const file = files[i];
+        const reader = new FileReader();
+        reader.onload = (e)=>{
+            const img = `<div class="property__images property__images-event property__images-list"><img class="cur__prop cur__prop-img property__images-item" data-imagenum="${numImg + i}" src="${e.target.result}"><button class="property__img-delete">Delete</button></div>`;
+            previewContainer.insertAdjacentHTML("beforeend", img);
+        };
+        reader.readAsDataURL(file);
+    }
+}
+
+},{"@parcel/transformer-js/src/esmodule-helpers.js":"fofuL"}]},["4ZjYh","fSlqf"], "fSlqf", "parcelRequire4d62")
+
+//# sourceMappingURL=index.js.map
+>>>>>>> d8bbd524af2c9af6314c0e019afdcbd4dddb2f72
