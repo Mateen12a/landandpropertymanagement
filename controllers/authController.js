@@ -103,7 +103,7 @@ exports.protect = catchAsync(async (req, res, next) => {
   // 2. Check if token is in cookies
   else if (req.cookies.jwt) {
     token = req.cookies.jwt;
-      console.log('Token from cookie:', token); // Debug log to check token from cookie
+      // console.log('Token from cookie:', token); // Debug log to check token from cookie
   }
   else if (req.query.token) { // Check for token in query parameters as a fallback
     token = req.query.token;

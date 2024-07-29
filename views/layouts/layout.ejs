@@ -4,6 +4,9 @@
     <head>
       <meta http-equiv="X-UA-Compatible" content="IE=edge" />
       <title><%= title %></title>
+      <% if (title == "Edit Property") { %>
+       
+      <% } %>
       <meta
         content="width=device-width, initial-scale=1.0, shrink-to-fit=no"
         name="viewport"
@@ -44,6 +47,7 @@
       <link rel="stylesheet" href="/assets/css/bootstrap.min.css" />
       <link rel="stylesheet" href="/assets/css/plugins.min.css" />
       <link rel="stylesheet" href="/assets/css/kaiadmin.min.css" />
+      <link rel="stylesheet" href="/assets/css/styler.css" />
   
       <!-- CSS Just for demo purpose, don't include it in your project -->
       <link rel="stylesheet" href="/assets/css/demo.css" />
@@ -88,7 +92,7 @@
                     </span>
                     <h4 class="text-section">Components</h4>
                   </li>
-                  <li class="nav-item <%= title === 'My listings' ? 'active' : '' %>">
+                  <li class="nav-item <%= title === 'Listings' ? 'active' : '' %>">
                     <a href="/profile/listings">
                       <i class="fas fa-list"></i>
                       <p>My Listings</p>
@@ -122,7 +126,7 @@
                     <p>Saved Properties</p>
                   </a>
                 </li>
-                <li class="nav-item <%= title === 'My Profile' ? 'active' : '' %>">
+                <li class="nav-item <%= title === 'Profile' ? 'active' : '' %>">
                   <a href="/me">
                     <i class="fas fa-cog"></i>
                     <p>Profile Settings</p>
@@ -454,7 +458,7 @@
                       </div>
                       <span class="profile-username">
                         <span class="op-7">Hi,</span>
-                        <span class="fw-bold"><%= user.name %></span>
+                        <span class="fw-bold user-name"><%= user.name %></span>
                       </span>
                     </a>
                     <ul class="dropdown-menu dropdown-user animated fadeIn">

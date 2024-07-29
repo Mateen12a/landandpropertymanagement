@@ -100,45 +100,61 @@ const filterObj = (obj, ...allowedFields) => {
 };
 
 exports.createProperty = catchAsync(async (req, res, next) => {
+  console.log('Incoming request body:', req.body);
+
   req.body.amenities = JSON.parse(req.body.amenities);
   req.body.location = JSON.parse(req.body.location);
-  const filteredBody = filterObj(
-    req.body,
-    "amenities",
-    "name",
-    "price",
-    "priceDiscount",
-    "imageCover",
-    "images",
-    "tags",
-    "area",
-    "type",
-    "location",
-    "description",
-    "agent"
-  );
-  // Get the currently logged-in user's ID
-  const currentUserId = req.user.id; // Assuming you have middleware to authenticate and set req.user
-  console.log("current User", currentUserId)
-  // Validate that the user is an agent or admin
-  const user = await User.findById(currentUserId);
-  if (user.role !== 'agent' && user.role !== 'admin') {
-    return next(new AppError('Only agents and admins can create properties', 403));
+  console.log('Parsed request body:', req.body);
+
+  // Default status to "published" if not provided
+  if (!req.body.status) {
+      req.body.status = 'published';
   }
 
-   // Create the property with the user as the agent
-   const property = await Property.create({
-    ...filteredBody,
-    agent: currentUserId 
-  });
+  const filteredBody = filterObj(
+      req.body,
+      "amenities",
+      "name",
+      "price",
+      "priceDiscount",
+      "imageCover",
+      "images",
+      "tags",
+      "area",
+      "type",
+      "location",
+      "description",
+      "agent",
+      "status"
+  );
+  console.log('Filtered body:', filteredBody);
+
+  const currentUserId = req.user.id; // Assuming you have middleware to authenticate and set req.user
+  console.log("current User", currentUserId)
+
+  const user = await User.findById(currentUserId);
+  if (user.role !== 'agent' && user.role !== 'admin') {
+      return next(new AppError('Only agents and admins can create properties', 403));
+  }
+  // Inside createProperty
+const propertyData = {
+  ...filteredBody,
+  agent: currentUserId 
+};
+// Log property data before creating
+console.log('Property data before saving:', propertyData);
+  const property = await Property.create(propertyData);
+  // Log created property to check saved data
+console.log('Created property:', property);
 
   res.status(201).json({
-    status: 'success',
-    data: {
-      data: property,
-    },
+      status: 'success',
+      data: {
+          data: property,
+      },
   });
 });
+
 
 exports.getProperty = catchAsync(async (req, res, next) => {
   const property = await Property.findById(req.params.id).populate({
@@ -228,9 +244,15 @@ exports.deleteProperty = catchAsync(async (req, res, next) => {
 });
 
 exports.updateProperty = catchAsync(async (req, res, next) => {
+  // Parse JSON fields
   req.body.amenities = JSON.parse(req.body.amenities);
-  req.body.location = JSON.parse(req.body.location);
-  
+
+  // Check if location is sent and parse if necessary
+  if (req.body.location) {
+    req.body.location = JSON.parse(req.body.location);
+  }
+
+  // Filter out unwanted fields
   const filteredBody = filterObj(
     req.body,
     "name",
@@ -247,12 +269,19 @@ exports.updateProperty = catchAsync(async (req, res, next) => {
     "agent",
     "status"
   );
+
+  // Get the currently logged-in user's ID
+  const currentUserId = req.user.id; // Assuming you have middleware to authenticate and set req.user
+
+  // Validate that the user is an agent or admin
   const user = await User.findById(currentUserId);
-    if (user.role !== "agent" && user.role !== "admin") {
-      return next(
-        new AppError("Only agents and admins can update properties", 403)
-      );
-    }
+  if (user.role !== "agent" && user.role !== "admin") {
+    return next(
+      new AppError("Only agents and admins can update properties", 403)
+    );
+  }
+
+  // Update the property
   const property = await Property.findByIdAndUpdate(
     req.params.id,
     filteredBody,
@@ -262,6 +291,10 @@ exports.updateProperty = catchAsync(async (req, res, next) => {
     }
   );
 
+  if (!property) {
+    return next(new AppError('No property found with that ID', 404));
+  }
+
   res.status(200).json({
     status: "success",
     data: {
@@ -269,6 +302,7 @@ exports.updateProperty = catchAsync(async (req, res, next) => {
     },
   });
 });
+
 
 exports.getPropertiesByAgent = catchAsync(async (req, res, next) => {
   const agentId = req.params.agentId; // Get agent ID from the URL parameter

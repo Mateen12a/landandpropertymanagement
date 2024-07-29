@@ -11,7 +11,7 @@ import {
   updateSettings,
   addBookmark,
 } from "./handleFormSubmit";
-import { handleImagePreview } from "./handleImagePreview";
+// import { handleImagePreview } from "./handleImagePreview";
 
 const loginForm = document.querySelector(".form--login");
 const signupForm = document.querySelector(".form--signup");
@@ -193,7 +193,7 @@ if (propertyFormUpdate) {
 
     const form = formFields(selectedImageCover, imgList);
 
-    addProperty(form, "update");
+    updateProperty(form, "update");
   });
 }
 

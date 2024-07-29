@@ -48,6 +48,9 @@ const propertySchema = new mongoose.Schema({
     type: String,
     required: [true, "A property must have a cover image"],
   },
+  area: {
+    type: Number,
+  },
   images: [String],
   createdAt: {
     type: Date,
@@ -119,14 +122,14 @@ const propertySchema = new mongoose.Schema({
   }
 });
 
-propertySchema.pre("save", function (next) {
-  if (propertyTypeCheck()) {
-    this.amenities.forEach((el) => {
-      if (+el.quantity > 1) el.amenity += "s";
-    });
-  }
-  next();
-});
+// propertySchema.pre("save", function (next) {
+//   if (propertyTypeCheck()) {
+//     this.amenities.forEach((el) => {
+//       if (+el.quantity > 1) el.amenity += "s";
+//     });
+//   }
+//   next();
+// });
 
 propertySchema.pre("save", function (next) {
   if (this.priceDiscount && this.priceDiscount > this.price) {

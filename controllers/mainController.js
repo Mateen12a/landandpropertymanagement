@@ -204,7 +204,7 @@ exports.mylistings = catchAsync(async (req, res, next) => {
     ]);
 
     res.render('mylistings', { 
-        title: 'My listings', 
+        title: 'Listings', 
         activePage: 'account',
         publishedProperties, // Pass published properties
         closedProperties, // Pass closed properties
@@ -246,7 +246,7 @@ exports.mylistings = catchAsync(async (req, res, next) => {
 exports.getMe = (req, res)=> {
   
     res.render('userprofile', {
-      title: 'My Profile',
+      title: 'Profile',
       activePage: 'account'
     });
 }

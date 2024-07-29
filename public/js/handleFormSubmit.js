@@ -4,107 +4,130 @@ import { showAlert } from "./alert";
 // Function to collect form data
 export const formFields = (imageCover, imageList) => {
   const form = new FormData();
-
   const location = {
-    state: document.querySelector(".location-state").value,
-  city: document.querySelector(".location-city").value,
-  street: document.querySelector(".location-street").value,
-
+      state: document.querySelector(".location-state").value,
+      city: document.querySelector(".location-city").value,
+      street: document.querySelector(".location-street").value
   };
-
-  const tags = [...document.querySelectorAll(".chec-tag")].map((el) =>
-    el.textContent.trim()
-  );
-
+  const tags = [...document.querySelectorAll(".chec-tag")].map((el) => el.textContent.trim());
   form.append("name", document.querySelector(".name").value);
   form.append("price", +document.querySelector(".price").value.trim());
   form.append("priceDiscount", +document.querySelector(".priceDiscount").value.trim());
   form.append("description", document.querySelector(".description").value.trim());
   form.append("area", document.querySelector(".area").value.trim());
   form.append("type", document.querySelector(".type").value.trim());
-  form.append("location", JSON.stringify(location));
-  form.append("imageCover", imageCover);
-
-  // Append tags
   tags.forEach((tag) => form.append("tags", tag));
+  form.append("location", JSON.stringify(location));
 
-  // Append images
+  if (imageCover) {
+      form.append("imageCover", imageCover);
+  }
+
+  // Include existing images in the form data
+  const existingImages = document.querySelectorAll('.property__images-item');
+  existingImages.forEach((img) => {
+      const imgSrc = img.src.split('/').pop();
+      form.append("existingImages", imgSrc);
+  });
+
   for (let i = 0; i < imageList.length; i++) {
-    form.append("images", imageList[i]);
+      form.append("images", imageList[i]);
+  }
+
+  // Only append status if present (for updates)
+  const status = document.querySelector(".status")?.value;
+  if (status) {
+      form.append("status", status);
   }
 
   return form;
 };
 
-export const addProperty = async (data, type) => {
+export const addProperty = async (data) => {
   try {
-    const propertyType = document.querySelector('.type').value.trim().toLowerCase();
+      if (document.querySelector(".type").value.trim().toLowerCase() !== "land") {
+          const amenities = [
+              {
+                  amenity: "bed",
+                  quantity: +document.querySelector(".quantity-bed").value.trim()
+              },
+              {
+                  amenity: "bath",
+                  quantity: +document.querySelector(".quantity-bath").value.trim()
+              },
+              {
+                  amenity: "toilet",
+                  quantity: +document.querySelector(".quantity-toilet").value.trim()
+              }
+          ];
+          data.append("amenities", JSON.stringify(amenities));
+      } else {
+          data.append("amenities", JSON.stringify([]));
+      }
 
-    if (propertyType !== 'land') {
+      const url = "http://localhost:5000/api/v1/property/new";
+      const token = localStorage.getItem('jwt');
+      if (!token) {
+          console.log('No authentication token found. Please log in again.');
+          return showAlert('error', 'No authentication token found. Please log in again.');
+      }
+      const res = await axios({
+          method: "POST",
+          url,
+          data,
+      });
+
+      if (res.data.status === "success") {
+          showAlert("success", "Property Added Successfully");
+          setTimeout(() => {
+              window.location.assign(`/property/${res.data.data.data._id}`);
+          }, 5000);
+      }
+  } catch (err) {
+      showAlert("error", err.response ? err.response.data.message : "An error occurred");
+  }
+};
+
+const updateProperty = async (data, id) => {
+  try {
+    if (document.querySelector(".type").value.trim().toLowerCase() !== "land") {
       const amenities = [
         {
-          amenity: type === 'new' ? 'bed' : document.querySelector('.amenity-bed').dataset.amenity,
-          quantity: +document.querySelector('.quantity-bed').value.trim(),
+          amenity: "bed",
+          quantity: +document.querySelector(".quantity-bed").value.trim()
         },
         {
-          amenity: type === 'new' ? 'bath' : document.querySelector('.amenity-bath').dataset.amenity,
-          quantity: +document.querySelector('.quantity-bath').value.trim(),
+          amenity: "bath",
+          quantity: +document.querySelector(".quantity-bath").value.trim()
         },
         {
-          amenity: type === 'new' ? 'toilet' : document.querySelector('.amenity-toilet').dataset.amenity,
-          quantity: +document.querySelector('.quantity-toilet').value.trim(),
-        },
+          amenity: "toilet",
+          quantity: +document.querySelector(".quantity-toilet").value.trim()
+        }
       ];
-      data.append('amenities', JSON.stringify(amenities));
+      data.append("amenities", JSON.stringify(amenities));
     } else {
-      data.append('amenities', JSON.stringify([]));
+      data.append("amenities", JSON.stringify([]));
     }
 
-    // Fetch agentId from localStorage
-    const agentId = localStorage.getItem('agentId');
-
-    if (!agentId) {
-      showAlert('error', 'No agent ID found. Please log in again.');
-      return;
-    }
-
-    // Append agentId to the data
-    data.append('agent', agentId);
-
-    const id = window.location.pathname.split('/').find((el) => el.length > 11 && (el !== 'property' && el !== 'update'));
-    
-    const url = type === 'new'
-      ? 'http://localhost:5000/api/v1/property/new'
-      : `http://localhost:5000/api/v1/property/${id}`;
-
-    const token = localStorage.getItem('jwt');
-    if (!token) {
-      console.log('No authentication token found. Please log in again.');
-      return showAlert('error', 'No authentication token found. Please log in again.');
-    }
-
+    const url = `http://localhost:5000/api/v1/property/${id}`;
     const res = await axios({
-      method: type === 'new' ? 'POST' : 'PATCH',
+      method: "PATCH",
       url,
       data,
       headers: {
-        'Authorization': `Bearer ${token}`,
-      },
+        'Content-Type': 'multipart/form-data'
+      }
     });
 
-    if (res.data.status === 'success') {
-      showAlert('success', 'Property Posted Successfully');
+    if (res.data.status === "success") {
+      showAlert("success", "Property Updated Successfully");
       setTimeout(() => {
-        window.location.assign('/properties');
+        window.location.assign(`/property/${res.data.data.data._id}`);
       }, 1500);
     }
   } catch (err) {
-    console.error('Error response:', err.response);
-    if (err.response && err.response.data) {
-      showAlert('error', err.response.data.message || 'An error occurred');
-    } else {
-      showAlert('error', 'An unknown error occurred');
-    }
+      showAlert("error", err.response ? err.response.data.message : "An error occurred");
   }
 };
 

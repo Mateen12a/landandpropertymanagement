@@ -189,11 +189,13 @@ Circles.create({
 	styleText:    true
 })
 
+const user_name = document.querySelector('.user-name').textContent.trim();
+const pageTitle = document.title;
 //Notify
 $.notify({
 	icon: 'icon-bell',
-	title: 'Welcome',
-	message: 'This is your Dashboard',
+	title: `Welcome ${user_name}`,
+	message: `This is your ${pageTitle} page`,
 },{
 	type: 'secondary',
 	placement: {

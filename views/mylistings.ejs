@@ -30,8 +30,8 @@
                           <h5 class="card-title"><%= property.name %></h5>
                           <p class="card-text">Views: <%= property.views %></p>
                           <a class="btn btn-label-success" href="/property/<%= property._id %>" class="btn btn-primary">View Details</a> 
-                          <!-- <a class="btn btn-primary" href="/property/<%= property._id %>/edit">Edit</a>  -->
-                          <!-- <button class="delete-property-btn btn btn-danger" data-property-id="<%= property._id %>"><i class="fas fa-trash"></i></button> -->
+                          <a class="btn btn-primary" href="/property/<%= property._id %>/edit">Edit</a> 
+                          <button class="delete-property-btn btn btn-danger" data-property-id="<%= property._id %>"><i class="fas fa-trash"></i></button>
                         </div>
                       </div>
                     </div>
@@ -64,7 +64,8 @@
                         <h5 class="card-title"><%= property.name %></h5>
                         <p class="card-text">Views: <%= property.views %></p>
                         <a href="/property/<%= property._id %>" class="btn btn-label-success">View Details</a> 
-                        <!-- <a class="btn btn-primary" href="/property/<%= property._id %>/edit">Edit</a>  -->
+                        <a class="btn btn-primary" href="/property/<%= property._id %>/edit">Edit</a>
+                        <button class="delete-property-btn btn btn-danger" data-property-id="<%= property._id %>"><i class="fas fa-trash"></i></button>
                       </div>
                     </div>
                   </div>
