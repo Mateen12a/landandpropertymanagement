@@ -7595,7 +7595,7 @@
       }
   
       const id = window.location.pathname.split("/").find((el) => el.length > 11 && (el !== "property" || el !== "update"));
-      const url = "http://localhost:5000/api/v1/property/new" 
+      const url = "https://landandpropertymanagement.com/api/v1/property/new" 
       const res = await axios({
         method: "POST",
         url,
@@ -7635,7 +7635,7 @@ const updateProperty = async (data, id) => {
         data.append("amenities", JSON.stringify([]));
       }
   
-      const url = `http://localhost:5000/api/v1/property/${id}`;
+      const url = `https://landandpropertymanagement.com/api/v1/property/${id}`;
       const res = await (0, _axiosDefault.default)({
         method: "PATCH",
         url,
@@ -7658,7 +7658,7 @@ const updateProperty = async (data, id) => {
   };
   const deleteProperty = async (id)=>{
       try {
-          const url = `http://localhost:5000/api/v1/property/${id}`;
+          const url = `https://landandpropertymanagement.com/api/v1/property/${id}`;
           const res = await (0, _axiosDefault.default)({
               url,
               method: "DELETE"
@@ -7675,7 +7675,7 @@ const updateProperty = async (data, id) => {
   };
   const updateSettings = async (data, type)=>{
       try {
-          const url = type === "password" ? "http://localhost:5000/api/v1/users/updateMyPassword/" : "http://localhost:5000/api/v1/users/updateMe";
+          const url = type === "password" ? "https://landandpropertymanagement.com/api/v1/users/updateMyPassword/" : "https://landandpropertymanagement.com/api/v1/users/updateMe";
           const res = await (0, _axiosDefault.default)({
               method: "PATCH",
               url,
@@ -7693,7 +7693,7 @@ const updateProperty = async (data, id) => {
   };
   const updateProfileSettings = async (data, type)=>{
       try {
-          const url = "http://localhost:5000/api/v1/users/updateMe";
+          const url = "https://landandpropertymanagement.com/api/v1/users/updateMe";
           const res = await (0, _axiosDefault.default)({
               method: "PATCH",
               url,
@@ -7717,7 +7717,7 @@ const updateProperty = async (data, id) => {
       try {
           // const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2OTUwODIyZTczMTU5ZjE2YTUwYzY5ZCIsImlhdCI6MTcyMTgxMzYwMiwiZXhwIjoxNzI5NTg5NjAyfQ.QjAf0q5IXanCebeasnK5gNi5LsR16pLAeZyx7HY7nAo";
           // console.log("Jwt: ", token)
-          const url = "http://localhost:5000/api/v1/users/updateMyPassword";
+          const url = "https://landandpropertymanagement.com/api/v1/users/updateMyPassword";
           const res = await (0, _axiosDefault.default)({
               method: "PATCH",
               url,
@@ -7739,7 +7739,7 @@ const updateProperty = async (data, id) => {
   };
   const updatePhotoSettings = async (data, type)=>{
       try {
-          const url = "http://localhost:5000/api/v1/users/updateMe";
+          const url = "https://landandpropertymanagement.com/api/v1/users/updateMe";
           const res = await (0, _axiosDefault.default)({
               method: "PATCH",
               url,
@@ -7760,7 +7760,7 @@ const updateProperty = async (data, id) => {
   };
   const addBookmark = async (data, type, el = null)=>{
       try {
-          const url = type === "add" ? "http://localhost:5000/api/v1/users/bookMark/add" : "http://localhost:5000/api/v1/users/bookmark/remove";
+          const url = type === "add" ? "https://landandpropertymanagement.com/api/v1/users/bookMark/add" : "https://landandpropertymanagement.com/api/v1/users/bookmark/remove";
           const res = await (0, _axiosDefault.default)({
               method: "PATCH",
               url,
@@ -7776,7 +7776,7 @@ const updateProperty = async (data, id) => {
   };
   const removeBookmark = async (data, el = null) => {
       try {
-        const url = "http://localhost:5000/api/v1/users/bookMark/remove";
+        const url = "https://landandpropertymanagement.com/api/v1/users/bookMark/remove";
         
         const res = await (0, _axiosDefault.default)({
           method: "PATCH",

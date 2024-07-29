@@ -65,7 +65,7 @@ export const addProperty = async (data) => {
           data.append("amenities", JSON.stringify([]));
       }
 
-      const url = "http://localhost:5000/api/v1/property/new";
+      const url = "http://landandpropertymanagement.com/api/v1/property/new";
       const token = localStorage.getItem('jwt');
       if (!token) {
           console.log('No authentication token found. Please log in again.');
@@ -110,7 +110,7 @@ const updateProperty = async (data, id) => {
       data.append("amenities", JSON.stringify([]));
     }
 
-    const url = `http://localhost:5000/api/v1/property/${id}`;
+    const url = `http://landandpropertymanagement.com/api/v1/property/${id}`;
     const res = await axios({
       method: "PATCH",
       url,
@@ -135,7 +135,7 @@ const updateProperty = async (data, id) => {
 export const deleteProperty = async () => {
   try {
     const id = window.location.pathname.split("/").find((el) => el.length > 11 && (el !== "property" && el !== "update"));
-    const url = `http://localhost:5000/api/v1/property/${id}`;
+    const url = `http://landandpropertymanagement.com/api/v1/property/${id}`;
     const token = localStorage.getItem('jwt'); // Retrieve the token from localStorage
 
     if (!token) {
@@ -168,8 +168,8 @@ export const updateSettings = async (data, type) => {
   try {
     const url =
       type === "password"
-        ? "http://localhost:5000/api/v1/users/updateMyPassword/"
-        : "http://localhost:5000/api/v1/users/updateMe";
+        ? "http://landandpropertymanagement.com/api/v1/users/updateMyPassword/"
+        : "http://landandpropertymanagement.com/api/v1/users/updateMe";
 
     const token = localStorage.getItem('jwt'); // Retrieve the token from localStorage
 
@@ -204,8 +204,8 @@ export const addBookmark = async (data, type, el = null) => {
   try {
     const url =
       type === "add"
-        ? "http://localhost:5000/api/v1/users/bookMark/add"
-        : "http://localhost:5000/api/v1/users/bookMark/remove";
+        ? "http://landandpropertymanagement.com/api/v1/users/bookMark/add"
+        : "http://landandpropertymanagement.com/api/v1/users/bookMark/remove";
 
     const res = await axios({
       method: "PATCH",
@@ -233,7 +233,7 @@ export const addBookmark = async (data, type, el = null) => {
 };
 export const removeBookmark = async (data, el = null) => {
   try {
-    const url = "http://localhost:5000/api/v1/users/bookMark/remove";
+    const url = "http://landandpropertymanagement.com/api/v1/users/bookMark/remove";
 
     const res = await axios({
       method: "PATCH",
@@ -259,7 +259,7 @@ export const getBookmarks = async () => {
   try {
     const res = await axios({
       method: "GET",
-      url: "http://localhost:5000/api/v1/users/bookmarks",
+      url: "http://landandpropertymanagement.com/api/v1/users/bookmarks",
     });
 
     if (res.data.status === "success") {
@@ -271,7 +271,7 @@ export const getBookmarks = async () => {
 };
 export const updateProfileSettings = async (formData) => {
   try {
-      const url = "http://localhost:5000/api/v1/users/updateMe";
+      const url = "http://landandpropertymanagement.com/api/v1/users/updateMe";
       const res = await axios({
           method: "PATCH",
           url,
@@ -293,7 +293,7 @@ export const updateProfileSettings = async (formData) => {
 
 export const updatePasswordSettings = async (formData) => {
   try {
-      const url = "http://localhost:5000/api/v1/users/updateMyPassword";
+      const url = "http://landandpropertymanagement.com/api/v1/users/updateMyPassword";
       const res = await axios({
           method: "PATCH",
           url,
@@ -315,7 +315,7 @@ export const updatePasswordSettings = async (formData) => {
 
 export const updatePhotoSettings = async (formData) => {
   try {
-      const url = "http://localhost:5000/api/v1/users/updateMe"; // Adjust URL if different
+      const url = "http://landandpropertymanagement.com/api/v1/users/updateMe"; // Adjust URL if different
       const res = await axios({
           method: "PATCH",
           url,
