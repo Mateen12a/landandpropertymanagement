@@ -338,8 +338,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
           try {
               const url = this.classList.contains('active') 
-                  ? `http://landandpropertymanagement.com/api/v1/users/bookmark/remove/${propertyId}` 
-                  : `http://landandpropertymanagement.com/api/v1/users/bookmark/add/${propertyId}`;
+                  ? `https://landandpropertymanagement.com/api/v1/users/bookmark/remove/${propertyId}` 
+                  : `https://landandpropertymanagement.com/api/v1/users/bookmark/add/${propertyId}`;
 
               const res = await axios({
                   method: "PATCH",
