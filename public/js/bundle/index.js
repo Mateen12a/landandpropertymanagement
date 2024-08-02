@@ -7696,7 +7696,7 @@ if (unverifyUser) {
   
       const id = window.location.pathname.split("/").find((el) => el.length > 11 && (el !== "property" || el !== "update"));
       const url = "https://landandpropertymanagement.com/api/v1/property/new" 
-      const res = await axios({
+      const res = await (0, _axiosDefault.default)({
         method: "POST",
         url,
         data
