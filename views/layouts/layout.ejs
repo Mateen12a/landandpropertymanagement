@@ -107,11 +107,15 @@
                     </a>
                     <div class="collapse" id="base">
                       <ul class="nav nav-collapse">
-                        <li>
-                          <a href="/property/new">
-                            <span class="sub-item">Submit New Property</span>
-                          </a>
-                        </li>
+                        <% if (['agent', 'admin', 'owner', 'developer'].includes(user.role)) { %>
+                          <% if (user.role === 'admin' || (['agent', 'owner', 'developer'].includes(user.role) && user.approved === true)) { %>
+                            <li>
+                              <a href="/property/new">
+                                <span class="sub-item">Submit New Property</span>
+                              </a>
+                            </li>
+                          <% } %>
+                        <% } %>
                         <li>
                           <a href="/properties">
                             <span class="sub-item">Purchase New Property</span>
@@ -526,6 +530,11 @@
                         </li>
                         <li>
                           <div class="dropdown-divider"></div>
+                          <% if (user.verified) { %>
+                            <span class="badge bg-success top-0 start-0 m-2">Verified</span>
+                        <% } else { %>
+                            <span class="badge bg-warning  top-0 start-0 m-2">Unverified</span>
+                        <% } %>
                           <a class="dropdown-item" href="/me">My Profile</a>
                           <a class="dropdown-item" href="/profile/listings">My Listings</a>
                           <div class="dropdown-divider"></div>
@@ -918,8 +927,19 @@
               <% if (activePage !== '404') { %>
               <% if (user) { %>
                 <% if (['agent', 'admin', 'owner', 'developer'].includes(user.role)) { %>
-                  <li class="<%= activePage === 'newproperty' ? 'active' : '' %>"><a href="/property/new" class="nav__btn--cta"><i class="fa-solid fa-paper-plane"></i> Submit Property</a></li>
-                <li class="<%= activePage === 'bookmarks' ? 'active' : '' %>"><a href="/account" class="bookmarks__link"><i class="fa-solid fa-dashboard"></i> Dashboard</a></li>
+                  <% if (user.role === 'admin' || (['agent', 'owner', 'developer'].includes(user.role) && user.approved === true)) { %>
+                    <li class="<%= activePage === 'newproperty' ? 'active' : '' %>">
+                      <a href="/property/new" class="nav__btn--cta">
+                        <i class="fa-solid fa-paper-plane"></i> Submit Property
+                      </a>
+                    </li>
+                  <% } %>
+                
+                  <li class="<%= activePage === 'bookmarks' ? 'active' : '' %>">
+                    <a href="/account" class="bookmarks__link">
+                      <i class="fa-solid fa-dashboard"></i> Dashboard
+                    </a>
+                  </li>
                 <% } %>
                 <li class="<%= activePage === 'bookmarks' ? 'active' : '' %>"><a href="/me" class="bookmarks__link"><i class="fa-solid fa-user"></i> My Account</a></li>
                 <li class="<%= activePage === 'logout' ? 'active' : '' %>"><a href="javascript:void(0);" id="nav__btn--logout" class="nav__btn--logout"><i class="fa-solid fa-sign-out"></i> Logout</a></li>
