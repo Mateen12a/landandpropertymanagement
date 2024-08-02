@@ -24,6 +24,7 @@ exports.getUsers = catchAsync(async (req, res, next) => {
   });
 });
 
+
 const multerStorage = multer.memoryStorage();
 
 const multerFilter = (req, file, cb) => {
@@ -156,6 +157,33 @@ exports.getBookmarks = catchAsync(async (req, res, next) => {
     status: "success",
     data: {
       bookmarks: user.bookmark,
+    },
+  });
+});
+
+exports.verifyUser = catchAsync(async (req, res, next)=>{
+  const user = await User.findByIdAndUpdate(req.params.id, { verified: true }, {
+    new: true,
+    runValidators: true,
+  });
+  if(!user) return next(new AppError('User not found with this ID', 404));
+  res.status(200).json({
+    status: 'success',
+    data: {
+      user,
+    },
+  });
+});
+exports.unverifyUser = catchAsync(async (req, res, next)=>{
+  const user = await User.findByIdAndUpdate(req.params.id, { verified: false }, {
+    new: true,
+    runValidators: true,
+  });
+  if(!user) return next(new AppError('User not found with this ID', 404));
+  res.status(200).json({
+    status: 'success',
+    data: {
+      user,
     },
   });
 });

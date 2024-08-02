@@ -1,0 +1,38 @@
+<div class="container">
+    <div class="page-inner">
+    <div class="row">
+      <div class="col-md-4">
+        <div class="card">
+          <img src="/img/users/<%= currentUser.photo %>" class="card-img-top" alt="<%= user.name %>">
+          <div class="card-body">
+            <h5 class="card-title"><%= currentUser.name %></h5>
+            <p class="card-text"><%= currentUser.email %></p>
+            <p class="card-text"><strong>Role:</strong> <%= currentUser.role %></p>
+            <p class="card-text"><strong>Status:</strong> <%= currentUser.status === 'verified' ? 'Verified' : 'Unverified' %></p>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-8">
+        <div class="card">
+          <div class="card-header">
+            <h5>User Details</h5>
+          </div>
+          <div class="card-body">
+            <p><strong>Phone:</strong> <%= currentUser.mobileno ? currentUser.mobileno : 'Not provided' %></p>
+            <!-- Add more user details as needed -->
+          </div>
+          <div class="card-footer text-end">
+            <% if (currentUser.role !== 'admin') { %>
+              <% if (currentUser.verified === false) { %>
+                <button class="btn btn-success verifyUser" data-user-id="<%= currentUser._id %>">Verify</button>
+              <% } else { %>
+                <button class="btn btn-danger unverifyUser" data-user-id="<%= currentUser._id %>">Unverify</button>
+              <% } %>
+            <% } %>
+            <a href="/users" class="btn btn-secondary">Back to Users</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  </div>

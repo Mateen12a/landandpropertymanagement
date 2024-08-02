@@ -119,17 +119,29 @@ const propertySchema = new mongoose.Schema({
   bookmarkCount: {
     type: Number,
     default: 0
-  }
+  },
+  approved: {
+    type: Boolean,
+    default: false,
+  },
+  buyRequests: [
+    {
+      user: {
+        type: mongoose.Schema.ObjectId,
+        ref: 'User'
+      },
+      status: {
+        type: String,
+        enum: ['pending', 'approved', 'rejected'],
+        default: 'pending'
+      },
+      createdAt: {
+        type: Date,
+        default: Date.now
+      }
+    }
+  ]
 });
-
-// propertySchema.pre("save", function (next) {
-//   if (propertyTypeCheck()) {
-//     this.amenities.forEach((el) => {
-//       if (+el.quantity > 1) el.amenity += "s";
-//     });
-//   }
-//   next();
-// });
 
 propertySchema.pre("save", function (next) {
   if (this.priceDiscount && this.priceDiscount > this.price) {
@@ -143,6 +155,30 @@ propertySchema.pre("save", function (next) {
   this.slug = slugify(this.name, { lower: true });
   next();
 });
+
+propertySchema.statics.calculateTotalSales = async function () {
+  const soldProperties = await this.find({ status: 'closed' });
+  const totalSalesAmount = soldProperties.reduce((acc, property) => acc + property.price, 0);
+  
+  if (soldProperties.length > 0) {
+    const dates = soldProperties.map(property => property.createdAt);
+    const startDate = new Date(Math.min(...dates));
+    const endDate = new Date(Math.max(...dates));
+    return {
+      soldProperties,
+      totalSalesAmount,
+      startDate,
+      endDate
+    };
+  }
+
+  return {
+    soldProperties,
+    totalSalesAmount,
+    startDate: null,
+    endDate: null
+  };
+};
 
 const Property = mongoose.model("Property", propertySchema, "Property");
 

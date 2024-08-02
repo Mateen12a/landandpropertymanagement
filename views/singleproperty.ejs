@@ -31,7 +31,14 @@
                     <div class="img-property-slide-wrap">
                         <div class="img-property-slide">
                             <% property.images.forEach(image => { %>
-                                <img src="/img/properties/<%= image %>" alt="Image" class="img-fluid" />
+                                <div class="position-relative">
+                                    <img src="/img/properties/<%= image %>" alt="Image" class="img-fluid" />
+                                    <% if (property.approved) { %>
+                                        <span class="badge bg-success position-absolute top-0 start-0 m-2">Approved</span>
+                                    <% } else { %>
+                                        <span class="badge bg-warning position-absolute top-0 start-0 m-2">Pending</span>
+                                    <% } %>
+                                </div>
                             <% }) %>
                         </div>
                     </div>
@@ -63,7 +70,13 @@
                             <% } %>
                         <% }) %>
                         <% } %>
-
+                        <span></span>
+                        <h5 class="heading">Price</h5>
+                        <h6>₦<%= property.price %></h6>
+                        <button class="btn btn-icon btn-link btn-primary op-8 buyButton" data-property-id="<%= property._id %>"  id="buyButton-<%= property._id %>">
+                            Buy now
+                        </button> 
+                    <% if (user.role === "admin") { %>
                     <% if (property.agent) { %>
                         <div class="d-block agent-box p-5">
                             <h4>Agent details</h4>
@@ -72,13 +85,18 @@
                             </div>
                             <div class="text">
                                 <h3 class="mb-0"><%= property.agent.name %></h3>
+                            <% if (property.agent.role === 'agent') { %>
                                 <div class="meta mb-3">Real Estate Agent</div>
+                            <% } else if (property.agent.role === 'owner') { %>
+                                <div class="meta mb-3">Landlord</div>
+                            <% } else if (property.agent.role === 'developer') { %>
+                                <div class="meta mb-3">Developer</div>
+                            <% } else if (property.agent.role === 'admin') { %>
+                                <div class="meta mb-3">Admin</div>
+                            <% } %>
                                 <p><%= property.agent.description %></p>
                                 <ul class="list-unstyled social dark-hover d-flex">
-                                    <li class="me-1"><a href="<%= property.agent.instagram %>"><span class="icon-instagram"></span></a></li>
-                                    <li class="me-1"><a href="<%= property.agent.twitter %>"><span class="icon-twitter"></span></a></li>
-                                    <li class="me-1"><a href="<%= property.agent.facebook %>"><span class="icon-facebook"></span></a></li>
-                                    <li class="me-1"><a href="<%= property.agent.linkedin %>"><span class="icon-linkedin"></span></a></li>
+                                    <li class="me-1"><a href="tel:<%= property.agent.mobileno %>"><span class="icon-whatsapp"></span></a></li>
                                 </ul>
                             </div>
                         </div>
@@ -93,6 +111,7 @@
                                 <div class="meta mb-3">Real Estate Agent</div>
                             </div>
                         </div>
+                    <% } %>
                     <% } %>
                 </div>
             </div>

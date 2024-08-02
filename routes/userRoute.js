@@ -32,6 +32,8 @@ router.patch(
   userController.resizeUserPhoto,
   userController.updateMe
 );
+router.patch("/verify/:id", authController.protect, userController.verifyUser);
+router.patch("/unverify/:id", authController.protect, userController.unverifyUser);
 
 router.get("/logout", authController.logout);
 router.post("/signup", authController.signup);

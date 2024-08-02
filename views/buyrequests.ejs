@@ -1,0 +1,110 @@
+<div class="container">
+    <div class="page-inner">
+    <h1 class="mb-4">Buy Requests</h1>
+    <!-- Pending Buy Requests -->
+    <div class="card mb-4">
+        <div class="card-header">
+          <h3>Pending Buy Requests</h3>
+        </div>
+        <div class="card-body">
+          <% if (pendingBuyRequests.length === 0) { %>
+            <p>No pending buy requests.</p>
+          <% } else { %>
+            <div class="table-responsive">
+              <table class="table table-hover">
+                <thead>
+                  <tr>
+                    <th>Property</th>
+                    <th>Buyer</th>
+                    <th>Date</th>
+                    <th>Status</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <% pendingBuyRequests.forEach(request => { %>
+                    <tr>
+                      <td><a href="/property/<%= request.property._id %>"><%= request.property.name %></a></td>
+                      <td><a href="/user/<%= request.user._id %>"><%= request.user.name %></a></td>
+                      <td><%= request.createdAt.toLocaleString() %></td>
+                      <td><span class="badge bg-warning">Pending</span></td>
+                    </tr>
+                  <% }) %>
+                </tbody>
+              </table>
+            </div>
+          <% } %>
+        </div>
+      </div>
+  
+      <!-- Approved Buy Requests -->
+      <div class="card mb-4">
+        <div class="card-header">
+          <h3>Approved Buy Requests</h3>
+        </div>
+        <div class="card-body">
+          <% if (approvedBuyRequests.length === 0) { %>
+            <p>No approved buy requests.</p>
+          <% } else { %>
+            <div class="table-responsive">
+              <table class="table table-hover">
+                <thead>
+                  <tr>
+                    <th>Property</th>
+                    <th>Buyer</th>
+                    <th>Date</th>
+                    <th>Status</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <% approvedBuyRequests.forEach(request => { %>
+                    <tr>
+                      <td><a href="/property/<%= request.property._id %>"><%= request.property.name %></a></td>
+                      <td><a href="/user/<%= request.user._id %>"><%= request.user.name %></a></td>
+                      <td><%= request.createdAt.toLocaleString() %></td>
+                      <td><span class="badge bg-success">Approved</span></td>
+                    </tr>
+                  <% }) %>
+                </tbody>
+              </table>
+            </div>
+          <% } %>
+        </div>
+      </div>
+
+      
+      <!-- Rejected Buy Requests -->
+      <div class="card mb-4">
+        <div class="card-header">
+          <h3>Rejected Buy Requests</h3>
+        </div>
+        <div class="card-body">
+          <% if (rejectedBuyRequests.length === 0) { %>
+            <p>No rejected buy requests.</p>
+          <% } else { %>
+            <div class="table-responsive">
+              <table class="table table-hover">
+                <thead>
+                  <tr>
+                    <th>Property</th>
+                    <th>Buyer</th>
+                    <th>Date</th>
+                    <th>Status</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <% rejectedBuyRequests.forEach(request => { %>
+                    <tr>
+                      <td><a href="/property/<%= request.property._id %>"><%= request.property.name %></a></td>
+                      <td><a href="/user/<%= request.user._id %>"><%= request.user.name %></a></td>
+                      <td><%= request.createdAt.toLocaleString() %></td>
+                      <td><span class="badge bg-danger">Rejected</span></td>
+                    </tr>
+                  <% }) %>
+                </tbody>
+              </table>
+            </div>
+          <% } %>
+        </div>
+      </div>
+  </div>
+</div>

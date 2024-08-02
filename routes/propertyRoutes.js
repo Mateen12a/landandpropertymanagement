@@ -12,8 +12,14 @@ route.post(
   propertyController.uploadPropertyImages,
   propertyController.resizePropertyImages,
   propertyController.createProperty,
- 
 );
+
+route.post('/buy/:id', authController.protect, propertyController.sendBuyRequest);
+route.patch('/approve/:id', authController.protect, authController.restrictTo(), propertyController.approveProperty);
+route.patch('/rejectbuy/:id', authController.protect, authController.restrictTo(), propertyController.rejectBuyRequest);
+route.patch('/approvebuy/:id', authController.protect, authController.restrictTo(), propertyController.approveBuyRequest);
+route.patch('/pendbuy/:id', authController.protect, authController.restrictTo(), propertyController.pendBuyRequest);
+route.patch('/pend/:id', authController.protect, authController.restrictTo(), propertyController.pendingProperty);
 
 route
   .get("/:id", propertyController.getProperty)

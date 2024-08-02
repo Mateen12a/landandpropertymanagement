@@ -13,7 +13,7 @@
       />
       <link
         rel="icon"
-        href="/assets/img/kaiadmin/favicon.ico"
+        href="/assets/img/landandpropertyMgt/favicon.ico"
         type="image/x-icon"
       />
   
@@ -79,7 +79,7 @@
           <div class="sidebar-wrapper scrollbar scrollbar-inner">
             <div class="sidebar-content">
               <ul class="nav nav-secondary">
-                <% if (user.role === 'agent' || user.role === 'admin') { %>
+                <% if (['agent', 'admin', 'owner', 'developer'].includes(user.role)) { %>
                   <li class="nav-item <%= title === 'Account' ? 'active' : '' %>">
                     <a href="/account">
                       <i class="fas fa-home"></i>
@@ -92,6 +92,7 @@
                     </span>
                     <h4 class="text-section">Components</h4>
                   </li>
+                  
                   <li class="nav-item <%= title === 'Listings' ? 'active' : '' %>">
                     <a href="/profile/listings">
                       <i class="fas fa-list"></i>
@@ -118,6 +119,46 @@
                         </li>
                       </ul>
                     </div>
+                  </li>
+                <% } %>
+                <% if (user.role === "admin") { %>
+                  <li class="nav-item <%= title === 'Users' ? 'active' : '' %>">
+                    <a href="/users">
+                      <i class="fas fa-user"></i>
+                      <p>Users</p>
+                    </a>
+                  </li>
+                  <li class="nav-item <%= title === 'Buy Requests' ? 'active' : '' %>">
+                    <a href="/buyrequests">
+                      <i class="fas fa-paper-plane"></i>
+                      <p>Buy Request</p>
+                    </a>
+                  </li>
+                  <li class="nav-item <%= title === 'Purchased Properties' ? 'active' : '' %>">
+                    <a href="/boughtproperties">
+                      <i class="fas fa-shopping-cart"></i>
+                      <p>Purchased Properties</p>
+                    </a>
+                  </li>
+                <% } else if (user.role === "agent" || user.role === "owner" || user.role === "developer") { %>
+                  <li class="nav-item <%= title === 'Buy Requests' ? 'active' : '' %>">
+                    <a href="/buyrequests">
+                      <i class="fas fa-paper-plane"></i>
+                      <p>Buy Request</p>
+                    </a>
+                  </li>
+                  <li class="nav-item <%= title === 'Purchased Properties' ? 'active' : '' %>">
+                    <a href="/boughtproperties">
+                      <i class="fas fa-shopping-cart"></i>
+                      <p>Purchased Properties</p>
+                    </a>
+                  </li>
+                <% } else if (user.role === 'user') { %>
+                  <li class="nav-item <%= title === 'Purchased Properties' ? 'active' : '' %>">
+                    <a href="/boughtproperties">
+                      <i class="fas fa-shopping-cart"></i>
+                      <p>Purchased Properties</p>
+                    </a>
                   </li>
                 <% } %>
                 <li class="nav-item <%= title === 'Saved Properties' ? 'active' : '' %>">
@@ -795,10 +836,14 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="author" content="Mateen James" />
-    <link rel="shortcut icon" href="/favicon.png" />
+    <link
+        rel="icon"
+        href="/assets/img/landandpropertyMgt/favicon.ico"
+        type="image/x-icon"
+      />
 
-    <meta name="description" content="" />
-    <meta name="keywords" content="bootstrap, bootstrap5" />
+    <meta name="description" content="Efficiently manage your land and properties with our online platform. Rent collection, maintenance, and property valuation made easy. Find your ideal property investment or list your property for rent or sale today." />
+    <meta name="keywords" content="property, land, management" />
 
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -872,7 +917,7 @@
               <!-- <li class="<%= activePage === 'contact' ? 'active' : '' %>"><a href="/contact">Contact Us</a></li> -->
               <% if (activePage !== '404') { %>
               <% if (user) { %>
-                <% if (user.role === 'agent' || user.role === 'admin') { %>
+                <% if (['agent', 'admin', 'owner', 'developer'].includes(user.role)) { %>
                   <li class="<%= activePage === 'newproperty' ? 'active' : '' %>"><a href="/property/new" class="nav__btn--cta"><i class="fa-solid fa-paper-plane"></i> Submit Property</a></li>
                 <li class="<%= activePage === 'bookmarks' ? 'active' : '' %>"><a href="/account" class="bookmarks__link"><i class="fa-solid fa-dashboard"></i> Dashboard</a></li>
                 <% } %>

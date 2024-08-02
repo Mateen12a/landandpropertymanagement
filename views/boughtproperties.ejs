@@ -1,0 +1,76 @@
+<div class="container">
+    <div class="page-inner">
+      <div class="row">
+        <div class="col-md-12">
+          <div class="card card-round">
+            <div class="card-header">
+              <div class="card-head-row card-tools-still-right">
+                <div class="card-title">Purchased Properties</div>
+                <div class="card-tools">
+                  <div class="dropdown">
+                    <button class="btn btn-icon btn-clean me-0" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                      <i class="fas fa-ellipsis-h"></i>
+                    </button>
+                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                      <a class="dropdown-item" href="#">Hide</a>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="card-body p-0">
+              <div class="table-responsive">
+                <table class="table align-items-center mb-0">
+                  <thead class="thead-light">
+                    <tr>
+                      <th scope="col">Property</th>
+                      <th scope="col" class="text-end">Date & Time</th>
+                      <th scope="col" class="text-end">Request</th>
+                      <!-- <th scope="col" class="text-end">Purchase</th> -->
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <% if (boughtProperties.length === 0) { %>
+                      <tr>
+                        <td colspan="3" class="text-center">No properties available</td>
+                      </tr>
+                    <% } else { %>
+                      <% boughtProperties.forEach(property => { %>
+                        <% property.buyRequests.forEach(request => { %>
+                          <% if (request.user._id.toString() === user._id.toString()) { %>
+                            <tr>
+                              <td><a href="/property/<%= property._id %>"><%= property.name %></a></td>
+                              <td class="text-end"><%= request.createdAt ? new Date(request.createdAt).toLocaleString() : 'N/A' %></td>
+                              <td class="text-end">
+                                <% if (request.status === 'pending') { %>
+                                  <span class="badge bg-warning">Pending</span>
+                                <% } else if (request.status === 'approved') { %>
+                                  <span class="badge bg-success">Approved</span>
+                                <% } else if (request.status === 'rejected') { %>
+                                  <span class="badge bg-danger">Rejected</span>
+                                <% } %>
+                              </td>
+                              <!-- <td class="text-end">
+                                <% if (request.status === 'pending') { %>
+                                  <span class="badge bg-warning">Pending</span>
+                                <% } else if (request.status === 'approved') { %>
+                                  <span class="badge bg-success">Successful</span>
+                                <% } else if (request.status === 'rejected') { %>
+                                  <span class="badge bg-danger">Cancelled</span>
+                                <% } %>
+                              </td> -->
+                            </tr>
+                          <% } %>
+                        <% }) %>
+                      <% }) %>
+                    <% } %>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+    </div>
+</div>

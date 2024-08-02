@@ -10544,3 +10544,10 @@ input[type=file] {
 .tags__field > * {
   margin-right: 0.4rem;
 }
+.img-property-slide .position-relative {
+    display: inline-block;
+}
+
+.img-property-slide .badge {
+    z-index: 10;
+}

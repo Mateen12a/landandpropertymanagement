@@ -1,0 +1,81 @@
+<div class="container">
+    <div class="page-inner">
+<div class="row">
+    <div class="col-md-12">
+      <div class="card card-round">
+        <div class="card-header">
+          <div class="card-head-row card-tools-still-right">
+            <div class="card-title">All Users</div>
+            <div class="card-tools">
+              <div class="dropdown">
+                <button class="btn btn-icon btn-clean me-0" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                  <i class="fas fa-ellipsis-h"></i>
+                </button>
+                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                  <a class="dropdown-item" href="#">Hide</a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="card-body p-0">
+          <div class="table-responsive">
+            <!-- All Users table -->
+            <table class="table align-items-center mb-0">
+              <thead class="thead-light">
+                <tr>
+                  <th scope="col">User</th>
+                  <th scope="col" class="text-end">Role</th>
+                  <th scope="col" class="text-end">Status</th>
+                  <th class="text-end">Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                <% if (allUsers.length === 0) { %>
+                  <tr>
+                    <td colspan="4" class="text-center">No users available</td>
+                  </tr>
+                <% } else { %>
+                  <% allUsers.forEach(user => { %>
+                    <tr>
+                      <th scope="row">
+                        <a class="btn btn-icon btn-round btn-info btn-sm me-2" href="/user/<%= user._id %>">
+                          <i class="fa fa-eye"></i>
+                        </a>
+                        <a class="text-black" href="/user/<%= user._id %>">
+                            <%= user.name %>
+                        </a>
+                      </th>
+                      <td class="text-end">
+                        <%= user.role  %>
+                      </td>
+                      <td class="text-end">
+                        <% if (user.verified) { %>
+                          <span class="badge badge-success">Verified</span>
+                        <% } else { %>
+                          <span class="badge badge-warning">Unverified</span>
+                        <% } %>
+                      </td>
+                      <td class="text-end">
+                        <% if (user.verified) { %>
+                          <button class="btn btn-icon btn-round btn-warning btn-sm me-2 unverifyUser" data-user-id="<%= user._id %>">
+                            <i class="fa fa-ban"></i>
+                          </button>
+                        <% } else { %>
+                          <button class="btn btn-icon btn-round btn-success btn-sm me-2 verifyUser" data-user-id="<%= user._id %>">
+                            <i class="fa fa-check"></i>
+                          </button>
+                        <% } %>
+                      </td>
+                    </tr>
+                  <% }) %>
+                <% } %>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  </div>
+  </div>

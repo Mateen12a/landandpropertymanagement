@@ -114,7 +114,7 @@ exports.protect = catchAsync(async (req, res, next) => {
   if (!token) {
     if (!token) {
       // console.log("No token provided:");
-      console.log("Headers:", req.headers); // Log all headers for debugging
+      // console.log("Headers:", req.headers); // Log all headers for debugging
       // console.log("Cookies:", req.cookies); // Log all cookies for debugging
       return next(new AppError("You are not logged in, please log in to get access", 401));
   }

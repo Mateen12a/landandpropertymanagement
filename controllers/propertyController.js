@@ -111,6 +111,8 @@ exports.createProperty = catchAsync(async (req, res, next) => {
       req.body.status = 'published';
   }
 
+  // Set approved to false by default
+  req.body.approved = false;
   const filteredBody = filterObj(
       req.body,
       "amenities",
@@ -125,27 +127,23 @@ exports.createProperty = catchAsync(async (req, res, next) => {
       "location",
       "description",
       "agent",
-      "status"
+      "status",
+      "approved"
   );
-  console.log('Filtered body:', filteredBody);
 
   const currentUserId = req.user.id; // Assuming you have middleware to authenticate and set req.user
-  console.log("current User", currentUserId)
 
   const user = await User.findById(currentUserId);
-  if (user.role !== 'agent' && user.role !== 'admin') {
-      return next(new AppError('Only agents and admins can create properties', 403));
+  if (!['agent', 'admin', 'owner', 'developer'].includes(user.role)) {
+      return next(new AppError('Only agents, admins, owners, and developers can create properties', 403));
   }
+  
   // Inside createProperty
 const propertyData = {
   ...filteredBody,
   agent: currentUserId 
 };
-// Log property data before creating
-console.log('Property data before saving:', propertyData);
   const property = await Property.create(propertyData);
-  // Log created property to check saved data
-console.log('Created property:', property);
 
   res.status(201).json({
       status: 'success',
@@ -161,6 +159,17 @@ exports.getProperty = catchAsync(async (req, res, next) => {
     path: "agent",
     fields: "name companyName",
   });
+  // Check if the current user is an admin
+  const currentUserId = req.user.id;
+  const user = await User.findById(currentUserId);
+
+  if (!property) {
+    return next(new AppError('No property found with that ID', 404));
+  }
+    if (!property.approved && user.role !== 'admin') {
+      return next(new AppError('You do not have permission to view this property', 403));
+    }
+
   property.views += 1;
   await property.save();
   res.status(200).json({
@@ -174,6 +183,14 @@ exports.getProperty = catchAsync(async (req, res, next) => {
 exports.getAllProperty = catchAsync(async (req, res, next) => {
   let filter = {};
   if (req.params.tourId) filter = { tour: req.params.tourId };
+
+  // Check if the current user is an admin
+  const currentUserId = req.user.id;
+  const user = await User.findById(currentUserId);
+  if (user.role !== 'admin') {
+    // If not an admin, only retrieve approved properties
+    filter.approved = true;
+  }
 
   const features = new APIFeatures(Property.find(filter), req.query)
     .filter()
@@ -210,6 +227,13 @@ exports.searchProperties = catchAsync(async (req, res, next) => {
     };
 
     console.log('Search filter:', JSON.stringify(searchFilter, null, 2));
+    // Check if the current user is an admin
+  const currentUserId = req.user.id;
+  const user = await User.findById(currentUserId);
+  if (user.role !== 'admin') {
+    // If not an admin, only retrieve approved properties
+    searchFilter.approved = true;
+  }
 
     // Direct query
     const properties = await Property.find(searchFilter).select('-__v').exec();
@@ -275,9 +299,9 @@ exports.updateProperty = catchAsync(async (req, res, next) => {
 
   // Validate that the user is an agent or admin
   const user = await User.findById(currentUserId);
-  if (user.role !== "agent" && user.role !== "admin") {
+  if (!['agent', 'admin', 'owner', 'developer'].includes(user.role)) {
     return next(
-      new AppError("Only agents and admins can update properties", 403)
+      new AppError("Only agents, admins, owners, and developers can update properties", 403)
     );
   }
 
@@ -349,3 +373,178 @@ exports.getTotalViewsByAgent = catchAsync(async (req, res, next) => {
   });
 });
 
+exports.getApprovalRequests = catchAsync(async (req, res, next) => {
+  const properties = await Property.find({ approved: false }).populate('agent', 'name email');
+  res.status(200).json({
+    status: 'success',
+    results: properties.length,
+    data: {
+      properties,
+    },
+  });
+});
+
+exports.getBuyRequests = catchAsync(async (req, res, next) => {
+  const properties = await Property.find({ 'buyRequests.0': { $exists: true } }).populate('buyRequests.user', 'name email');
+  res.status(200).json({
+    status: 'success',
+    results: properties.length,
+    data: {
+      properties,
+    },
+  });
+});
+
+exports.approveProperty = catchAsync(async (req, res, next) => {
+  const property = await Property.findByIdAndUpdate(req.params.id, { approved: true }, {
+    new: true,
+    runValidators: true,
+  });
+
+  if (!property) {
+    return next(new AppError('No property found with that ID', 404));
+  }
+
+  res.status(200).json({
+    status: 'success',
+    data: {
+      property,
+    },
+  });
+});
+
+exports.approveBuyRequest = catchAsync(async (req, res, next) => {
+
+  const { id: propertyId } = req.params;
+  const { requestId } = req.body; // Ensure this is correctly passed in the body
+  console.log("requestId: ", requestId)
+  console.log("propertyId: ", propertyId)
+
+
+  if (!requestId) {
+    return next(new AppError('Buy request ID is required', 400));
+  }
+
+  const property = await Property.findOneAndUpdate(
+    { _id: propertyId, 'buyRequests._id': requestId },
+    { 'buyRequests.$.status': 'approved' },
+    {
+      new: true,
+      runValidators: true,
+    }
+  );
+  console.log("Approved Buy request: ", property)
+
+  if (!property) {
+    return next(new AppError('No property or buy request found with that ID', 404));
+  }
+
+  res.status(200).json({
+    status: 'success',
+    data: {
+      property,
+    },
+  });
+});
+
+exports.rejectBuyRequest = catchAsync(async (req, res, next) => {
+  const { id: propertyId } = req.params;
+  const { requestId } = req.body; // Ensure this is correctly passed in the body
+  console.log("requestId: ", requestId)
+  console.log("propertyId: ", propertyId)
+
+
+  if (!requestId) {
+    return next(new AppError('Buy request ID is required', 400));
+  }
+
+  const property = await Property.findOneAndUpdate(
+    { _id: propertyId, 'buyRequests._id': requestId },
+    { 'buyRequests.$.status': 'rejected' },
+    {
+      new: true,
+      runValidators: true,
+    }
+  );
+  if (!property) {
+    return next(new AppError('No property or buy request found with that ID', 404));
+  }
+
+  res.status(200).json({
+    status: 'success',
+    data: {
+      property,
+    },
+  });
+});
+
+exports.pendBuyRequest = catchAsync(async (req, res, next) => {
+  const { id: propertyId } = req.params;
+  const { requestId } = req.body; // Ensure this is correctly passed in the body
+
+
+  if (!requestId) {
+    return next(new AppError('Buy request ID is required', 400));
+  }
+
+  const property = await Property.findOneAndUpdate(
+    { _id: propertyId, 'buyRequests._id': requestId },
+    { 'buyRequests.$.status': 'pending' },
+    {
+      new: true,
+      runValidators: true,
+    }
+  );
+
+  if (!property) {
+    return next(new AppError('No property found with that ID', 404));
+  }
+
+  res.status(200).json({
+    status: 'success',
+    data: {
+      property,
+    },
+  });
+});
+
+exports.pendingProperty = catchAsync(async (req, res, next) => {
+  const property = await Property.findByIdAndUpdate(req.params.id, { approved: false }, {
+    new: true,
+    runValidators: true,
+  });
+
+  if (!property) {
+    return next(new AppError('No property found with that ID', 404));
+  }
+
+  res.status(200).json({
+    status: 'success',
+    data: {
+      property,
+    },
+  });
+});
+
+
+exports.sendBuyRequest = catchAsync(async (req, res, next) => {
+  const property = await Property.findById(req.params.id);
+
+  if (!property) {
+    return next(new AppError('No property found with that ID', 404));
+  }
+
+  const buyRequest = {
+    user: req.user.id
+  };
+
+  property.buyRequests.push(buyRequest);
+  await property.save();
+
+  res.status(200).json({
+    status: 'success',
+    data: {
+      property
+    }
+  });
+});

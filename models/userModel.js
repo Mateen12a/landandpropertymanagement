@@ -30,7 +30,7 @@ const userSchema = new mongoose.Schema({
   },
   role: {
     type: String,
-    enum: ["user", "agent", "admin"],
+    enum: ["user", "agent", "admin", "owner", "developer"],
     default: "user",
   },
   companyName: {
@@ -63,6 +63,10 @@ const userSchema = new mongoose.Schema({
     type: Boolean,
     default: true,
     select: false,
+  },
+  verified: {
+    type: Boolean,
+    default: false
   },
   bookmark: [{ type: mongoose.Schema.ObjectId, ref: "Property" }],
 });

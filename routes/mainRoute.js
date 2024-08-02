@@ -22,16 +22,31 @@ router
         authController.isLoggedIn,
         mainController.newProperty
     )
+    .get("/users",
+        authController.protect,
+        authController.restrictTo(),
+        authController.isLoggedIn,
+        mainController.getUsers
+    )
+    .get("/user/:id",
+        authController.protect,
+        authController.restrictTo(),
+        authController.isLoggedIn,
+        mainController.getUser
+    )
     .get("/properties/search", authController.isLoggedIn, mainController.searchProperties)
     .get("/property/:id", authController.isLoggedIn, mainController.getProperty)
     .get('/register', authController.isLoggedIn, mainController.getSignup)
     .get('/login', mainController.getLogin)
     .get('/account', authController.protect, authController.restrictTo(), authController.isLoggedIn, mainController.account)
     .get('/profile/listings', authController.protect, authController.restrictTo(), authController.isLoggedIn, mainController.mylistings)
+    .get('/buyrequests', authController.protect, authController.restrictTo(), authController.isLoggedIn, mainController.getBuyRequests)
+
     .get('/profile/performance', authController.protect, authController.restrictTo(), authController.isLoggedIn, mainController.performance)
     .get('/profile/notifications', authController.protect, authController.isLoggedIn, mainController.notifications)
     .get('/property/:id/edit', authController.protect, authController.isLoggedIn, mainController.updateProperty)
     .get('/bookmarks', authController.protect, mainController.getBookmarks)
+    .get('/boughtproperties', authController.protect, mainController.getBoughtProperties)
     .get('/me', authController.isLoggedIn, mainController.getMe)
     .get('/*', authController.isLoggedIn, mainController.getErrorPage);
 
