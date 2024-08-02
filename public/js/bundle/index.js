@@ -7706,7 +7706,7 @@ if (unverifyUser) {
         (0, _alert.showAlert)("success", "Property added Successfully");
         setTimeout(() => {
           window.location.assign(`/property/${res.data.data.data._id}`);
-        }, 20000);
+        }, 500);
       }
     } catch (err) {
       (0, _alert.showAlert)("error", err.response.data.message);
